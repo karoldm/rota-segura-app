@@ -30,6 +30,6 @@ class _ButtonState extends State<Button> {
                 ))),
         style: ElevatedButton.styleFrom(
             padding: EdgeInsets.zero, shadowColor: Colors.transparent),
-        onPressed: () => widget.function!);
+        onPressed: widget.function!);
   }
 }
