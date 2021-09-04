@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rota_segura_app/screens/profile_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 //my_app
@@ -20,9 +21,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModel<UserModel>(
         model: UserModel(),
-        child: MaterialApp(
-            title: 'rota segura',
-            debugShowCheckedModeBanner: false,
-            home: LoginPage()));
+        child:
+            ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+          return MaterialApp(
+              title: 'rota segura',
+              debugShowCheckedModeBanner: false,
+              home: model.isLoggedIn() ? ProfilePage() : LoginPage());
+        }));
   }
 }
