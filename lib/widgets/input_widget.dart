@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Input extends StatefulWidget {
-  final String? placeholder;
-  final TextEditingController? controller;
-  final TextInputType? textType;
+  final String placeholder;
+  final TextEditingController controller;
+  final TextInputType textType;
 
-  const Input({Key? key, this.placeholder, this.controller, this.textType})
-      : super(key: key);
+  const Input({
+    Key? key,
+    required this.placeholder,
+    required this.controller,
+    required this.textType,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _InputState();
@@ -16,7 +20,14 @@ class _InputState extends State<Input> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        keyboardType: widget.textType,
+        validator: (value) {
+          //verificando se o campo foi preenchido
+          if (value == null || value.isEmpty) {
+            return 'Esse campo precisa ser preenchido';
+          }
+          return null;
+        },
+        keyboardType: widget.textType, //tipo do teclado
         cursorColor: Colors.black,
         textAlignVertical: TextAlignVertical.center,
         controller: widget.controller,

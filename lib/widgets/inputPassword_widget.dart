@@ -13,6 +13,7 @@ class InputPassword extends StatefulWidget {
 
 class _InputPasswordState extends State<InputPassword> {
   bool _viewPassword = true;
+  //função para exibir e esconder texto da senha
   void _toggleViewPassword() {
     setState(() {
       _viewPassword = !_viewPassword;
@@ -22,8 +23,15 @@ class _InputPasswordState extends State<InputPassword> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        obscureText: _viewPassword,
-        autocorrect: false,
+        validator: (value) {
+          //verificando se o campo foi preenchido
+          if (value == null || value.isEmpty) {
+            return 'Esse campo precisa ser preenchido';
+          }
+          return null;
+        },
+        obscureText: _viewPassword, //texto escondido
+        autocorrect: false, //nunca sugerir valor para senha
         cursorColor: Colors.black,
         textAlignVertical: TextAlignVertical.center,
         controller: widget.controller,
@@ -35,6 +43,7 @@ class _InputPasswordState extends State<InputPassword> {
               UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
           hintText: widget.placeholder,
           hintStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
+          //icone para esconder senha
           suffixIcon: IconButton(
             color: Colors.black,
             onPressed: _toggleViewPassword,
