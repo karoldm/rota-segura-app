@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 //libraries
@@ -10,31 +12,56 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModel extends Model {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _db = FirebaseFirestore.instance;
-  late UserCredential? _userCredential;
-  late Map<String, dynamic>
-      userData; //dados do usuario para compartilhar com outras telas
+
+  User? _user; //dados de login
+  //variável para armazenar credencial do usuário logado atualmente
+  //essa variável armazena somente os dados de login (email, uid, phoneNumber, photoURI, etc)
+  //por isso para recuperar os dados armazenados no bando de dados é utilizado a variável userData
+  //para recuperar dados do db usa-se _user.uid
+  Map<String, dynamic>? _userData; //dados do usuario
 
   void signUp(Map<String, dynamic> data, String password,
-      VoidCallback? success(), VoidCallback? fail()) {
-    _auth
+      VoidCallback? success(), VoidCallback? fail()) async {
+    await _auth
         .createUserWithEmailAndPassword(
             email: data['email'], password: password)
         .then((value) async {
-      await _db.collection('users').doc(value.user!.uid).set(data);
+      await _db
+          .collection('users')
+          .doc(value.user!
+              .uid) //usuário identificado pelo uid (o uid é gerado automaticamente pelo firebase e é único para cada usuário)
+          .set(data); //armazenado usuário no banco de dados
       success();
     }).catchError((e) {
       print(e);
       fail();
+    });
+  }
+
+  void updateUser(Map<String, dynamic> data, String password,
+      VoidCallback? success(), VoidCallback? fail()) async {
+    await _db
+        .collection('users')
+        .doc(_user!
+            .uid) //buscando usuário pelo uid (_user sempre armazena o usuário logado atualmente)
+        .update(data)
+        .then((value) async {
+      await _auth
+          .signInWithEmailAndPassword(email: data['email'], password: password)
+          .then((value) {
+        _currentUser();
+      }).catchError((e) {
+        print(e);
+      });
     });
   }
 
   void signIn(String email, String password, VoidCallback? success(),
-      VoidCallback? fail()) {
-    _auth
+      VoidCallback? fail()) async {
+    await _auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      _userCredential = value;
-      _currentUser();
+      _currentUser(); //atualizando usuário atual
       success();
     }).catchError((e) {
       print(e);
@@ -42,16 +69,29 @@ class UserModel extends Model {
     });
   }
 
-  void signOut(VoidCallback? success()) {
-    _auth.signOut();
-    _userCredential = null;
-    userData = {};
-    success();
+  void logout() async {
+    await _auth.signOut().then((value) {
+      _user = null;
+      _userData = {};
+    }).catchError((e) {
+      print(e);
+    });
   }
 
-  Future<Null> _currentUser() async {
-    final currentUser =
-        await _db.collection('users').doc(_userCredential!.user!.uid).get();
-    userData = currentUser.data()!;
+  void _currentUser() async {
+    _user = _auth.currentUser; //usuário logado atualmente
+    await _db.collection('users').doc(_user!.uid).get().then((value) {
+      _userData = value.data()!; //pegando todos os dados do usuário no bd
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  Map<String, dynamic>? getUserData() {
+    return _userData; //retornar dados do usuário armazenados no bd
+  }
+
+  bool isLoggedIn() {
+    return _user != null;
   }
 }
