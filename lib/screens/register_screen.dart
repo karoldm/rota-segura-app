@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rota_segura_app/widgets/divider_widget.dart';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
@@ -73,8 +74,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
+                      DividerForm(text: 'Dados Pessoais'),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Input(
                           textType: TextInputType.text,
                           placeholder: 'nome completo',
@@ -82,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Input(
                           textType: TextInputType.number,
                           placeholder: 'telefone',
@@ -90,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Input(
                           textType: TextInputType.number,
                           placeholder: 'CPF',
@@ -98,15 +100,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Input(
                           textType: TextInputType.datetime,
                           placeholder: 'nascimento',
                           controller: _birthController,
                         ),
                       ),
+                      DividerForm(text: 'Dados de Endereço'),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Input(
                           textType: TextInputType.text,
                           placeholder: 'endereço',
@@ -114,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Input(
                           textType: TextInputType.text,
                           placeholder: 'bairro',
@@ -122,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Input(
                           textType: TextInputType.text,
                           placeholder: 'cidade',
@@ -130,15 +133,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Input(
                           textType: TextInputType.text,
                           placeholder: 'estado',
                           controller: _estadoController,
                         ),
                       ),
+                      DividerForm(text: 'Dados de Login'),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: Input(
                           textType: TextInputType.emailAddress,
                           placeholder: 'email',
@@ -146,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        padding: const EdgeInsets.only(top: 30),
                         child: InputPassword(
                           placeholder: 'senha',
                           controller: _passwordController,
@@ -180,25 +184,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                     'email': _emailController.text,
                                   };
                                   final password = _passwordController.text;
-                                  model.signUp(data, password, () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          backgroundColor: Colors.green,
-                                          content:
-                                              Text('Cadastrado com sucesso!')),
-                                    );
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => LoginPage()));
-                                  }, () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          backgroundColor: Colors.red,
-                                          content: Text(
-                                              'Algo deu errado ao cadastrar, tente novamente!')),
-                                    );
-                                  });
+                                  model.signUp(
+                                      data,
+                                      password,
+                                      successRegister(context),
+                                      failRegister(context));
                                 }));
                       })
                     ],
@@ -221,4 +211,23 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ))));
   }
+
+  successRegister(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text('Cadastrado com sucesso!')),
+    );
+    Navigator.pop(context);
+  }
+
+  failRegister(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Algo deu errado ao cadastrar, tente novamente!')),
+    );
+  }
+
+  void submitRegister() {}
 }

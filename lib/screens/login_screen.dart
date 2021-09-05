@@ -97,25 +97,8 @@ class _LoginPageState extends State<LoginPage> {
                               final email = _emailController.text;
                               final password = _passwordController.text;
                               //função de login
-                              model.signIn(email, password,
-                                  //função para sucesso do login
-                                  () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        //mandando usuário para a página de perfil
-                                        builder: (context) => ProfilePage()));
-                              },
-                                  //função para falha do login
-                                  () {
-                                //retorno para o usuário
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      backgroundColor: Colors.red,
-                                      content:
-                                          Text('Email ou senha inválidos!')),
-                                );
-                              });
+                              model.signIn(
+                                  email, password, successLogin(), failLogin());
                             }));
                   })
                 ],
@@ -133,11 +116,27 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(color: Colors.black),
                   textAlign: TextAlign.center,
                 ),
-                onPressed: () => Navigator.pushReplacement(
+                onPressed: () => Navigator.push(
                     context,
                     //enviando usuário para a página de registro
                     MaterialPageRoute(builder: (context) => RegisterPage()))))
       ],
     ))));
+  }
+
+  successLogin() {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            //mandando usuário para a página de perfil
+            builder: (context) => ProfilePage()));
+  }
+
+  failLogin() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Email ou senha inválidos!')),
+    );
   }
 }
