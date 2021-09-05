@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 //libraries
@@ -38,6 +36,24 @@ class UserModel extends Model {
     });
   }
 
+  void signIn(String email, String password, VoidCallback? success(),
+      VoidCallback? fail()) async {
+    await _auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) async {
+      _user = _auth.currentUser; //usuário logado atualmente
+      await _db.collection('users').doc(_user!.uid).get().then((value) {
+        _userData = value.data()!; //pegando todos os dados do usuário no bd
+        success();
+      }).catchError((e) {
+        print(e);
+      }); //atualizando usuário atual
+    }).catchError((e) {
+      print(e);
+      fail();
+    });
+  }
+
   void updateUser(Map<String, dynamic> data, String password,
       VoidCallback? success(), VoidCallback? fail()) async {
     await _db
@@ -45,43 +61,14 @@ class UserModel extends Model {
         .doc(_user!
             .uid) //buscando usuário pelo uid (_user sempre armazena o usuário logado atualmente)
         .update(data)
-        .then((value) async {
-      await _auth
-          .signInWithEmailAndPassword(email: data['email'], password: password)
-          .then((value) {
-        _currentUser();
-      }).catchError((e) {
-        print(e);
-      });
-    });
-  }
-
-  void signIn(String email, String password, VoidCallback? success(),
-      VoidCallback? fail()) async {
-    await _auth
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      _currentUser(); //atualizando usuário atual
-      success();
-    }).catchError((e) {
-      print(e);
-      fail();
-    });
+        .then((value) {})
+        .catchError((e) {});
   }
 
   void logout() async {
     await _auth.signOut().then((value) {
       _user = null;
       _userData = {};
-    }).catchError((e) {
-      print(e);
-    });
-  }
-
-  void _currentUser() async {
-    _user = _auth.currentUser; //usuário logado atualmente
-    await _db.collection('users').doc(_user!.uid).get().then((value) {
-      _userData = value.data()!; //pegando todos os dados do usuário no bd
     }).catchError((e) {
       print(e);
     });

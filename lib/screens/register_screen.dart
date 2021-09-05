@@ -184,11 +184,22 @@ class _RegisterPageState extends State<RegisterPage> {
                                     'email': _emailController.text,
                                   };
                                   final password = _passwordController.text;
-                                  model.signUp(
-                                      data,
-                                      password,
-                                      successRegister(context),
-                                      failRegister(context));
+                                  model.signUp(data, password, () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          backgroundColor: Colors.green,
+                                          content:
+                                              Text('Cadastrado com sucesso!')),
+                                    );
+                                    Navigator.pop(context);
+                                  }, () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content: Text(
+                                              'Algo deu errado ao cadastrar, tente novamente!')),
+                                    );
+                                  });
                                 }));
                       })
                     ],
@@ -211,23 +222,4 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ))));
   }
-
-  successRegister(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          backgroundColor: Colors.green,
-          content: Text('Cadastrado com sucesso!')),
-    );
-    Navigator.pop(context);
-  }
-
-  failRegister(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Algo deu errado ao cadastrar, tente novamente!')),
-    );
-  }
-
-  void submitRegister() {}
 }

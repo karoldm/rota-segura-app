@@ -97,8 +97,21 @@ class _LoginPageState extends State<LoginPage> {
                               final email = _emailController.text;
                               final password = _passwordController.text;
                               //função de login
-                              model.signIn(
-                                  email, password, successLogin(), failLogin());
+                              model.signIn(email, password, () {
+                                //função sucesso do login
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        //mandando usuário para a página de perfil
+                                        builder: (context) => ProfilePage()));
+                              }, () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content:
+                                          Text('Email ou senha inválidos!')),
+                                );
+                              });
                             }));
                   })
                 ],
@@ -122,21 +135,5 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => RegisterPage()))))
       ],
     ))));
-  }
-
-  successLogin() {
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            //mandando usuário para a página de perfil
-            builder: (context) => ProfilePage()));
-  }
-
-  failLogin() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Email ou senha inválidos!')),
-    );
   }
 }
