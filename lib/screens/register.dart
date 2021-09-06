@@ -8,8 +8,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:rota_segura_app/models/user_model.dart';
 
 //screens
-import 'package:rota_segura_app/screens/login_screen.dart';
-import 'package:rota_segura_app/screens/profile_screen.dart';
+import 'package:rota_segura_app/screens/login.dart';
 
 //widgets
 import 'package:rota_segura_app/widgets/appName_widget.dart';

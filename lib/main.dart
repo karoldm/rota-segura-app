@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:rota_segura_app/screens/profile_screen.dart';
+import 'package:rota_segura_app/screens/home.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 //my_app
-import 'package:rota_segura_app/screens/login_screen.dart';
+import 'package:rota_segura_app/screens/login.dart';
 import 'package:rota_segura_app/models/user_model.dart';
 
 //firebase
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
               title: 'rota segura',
               debugShowCheckedModeBanner: false,
-              home: model.isLoggedIn() ? ProfilePage() : LoginPage());
+              home: model.isLoggedIn() ? HomePage() : LoginPage());
         }));
   }
 }
