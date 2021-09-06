@@ -54,7 +54,11 @@ class UserModel extends Model {
     });
   }
 
-  void updateUser(Map<String, dynamic> data, String password,
+  void editPasswordUser(String oldPassword, String newPassword, VoidCallback? success(), VoidCallback? fail()){
+
+  }
+
+  void editUser(Map<String, dynamic> data, String password,
       VoidCallback? success(), VoidCallback? fail()) async {
     await _db
         .collection('users')

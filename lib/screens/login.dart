@@ -13,8 +13,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:rota_segura_app/models/user_model.dart';
 
 //screens
-import 'package:rota_segura_app/screens/profile_screen.dart';
-import 'package:rota_segura_app/screens/register_screen.dart';
+import 'package:rota_segura_app/screens/home.dart';
+import 'package:rota_segura_app/screens/register.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                                     context,
                                     MaterialPageRoute(
                                         //mandando usuário para a página de perfil
-                                        builder: (context) => ProfilePage()));
+                                        builder: (context) => HomePage()));
                               }, () {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
