@@ -20,11 +20,13 @@ class UserModel extends Model {
 
   void signUp(Map<String, dynamic> data, String password,
       VoidCallback? success(), VoidCallback? fail()) async {
-    await _auth
+    await this
+        ._auth
         .createUserWithEmailAndPassword(
             email: data['email'], password: password)
         .then((value) async {
-      await _db
+      await this
+          ._db
           .collection('users')
           .doc(value.user!
               .uid) //usuário identificado pelo uid (o uid é gerado automaticamente pelo firebase e é único para cada usuário)
@@ -38,25 +40,20 @@ class UserModel extends Model {
 
   void signIn(String email, String password, VoidCallback? success(),
       VoidCallback? fail()) async {
-    await _auth
+    await this
+        ._auth
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) async {
-      _user = _auth.currentUser; //usuário logado atualmente
-      await _db.collection('users').doc(_user!.uid).get().then((value) {
-        _userData = value.data()!; //pegando todos os dados do usuário no bd
-        success();
-      }).catchError((e) {
-        print(e);
-      }); //atualizando usuário atual
+        .then((value) {
+      this._user = _auth.currentUser; //usuário logado atualmente
+      success();
     }).catchError((e) {
       print(e);
       fail();
     });
   }
 
-  void editPasswordUser(String oldPassword, String newPassword, VoidCallback? success(), VoidCallback? fail()){
-
-  }
+  void editPasswordUser(String oldPassword, String newPassword,
+      VoidCallback? success(), VoidCallback? fail()) {}
 
   void editUser(Map<String, dynamic> data, String password,
       VoidCallback? success(), VoidCallback? fail()) async {
@@ -69,20 +66,35 @@ class UserModel extends Model {
         .catchError((e) {});
   }
 
-  void logout() async {
+  void logout(VoidCallback? success(), VoidCallback? fail()) async {
     await _auth.signOut().then((value) {
-      _user = null;
-      _userData = {};
+      this._user = null;
+      this._userData = {};
+      success();
+    }).catchError((e) {
+      print(e);
+      fail();
+    });
+  }
+
+  Future<Null> _loadUserData() async {
+    await this._db.collection('users').doc(this._user!.uid).get().then((value) {
+      this._userData = value.data();
     }).catchError((e) {
       print(e);
     });
   }
 
-  Map<String, dynamic>? getUserData() {
-    return _userData; //retornar dados do usuário armazenados no bd
+  Map<String, dynamic> getUserData() {
+    return this._userData!;
   }
 
   bool isLoggedIn() {
-    return _user != null;
+    this._user = _auth.currentUser;
+    if (_user != null) {
+      _loadUserData();
+      return true;
+    }
+    return false;
   }
 }
