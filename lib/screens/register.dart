@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:rota_segura_app/widgets/divider_widget.dart';
+import 'package:rota_segura_app/widgets/divider.dart';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
 
 //models
-import 'package:rota_segura_app/models/user_model.dart';
+import 'package:rota_segura_app/models/user.dart';
 
 //screens
 import 'package:rota_segura_app/screens/login.dart';
 
 //widgets
-import 'package:rota_segura_app/widgets/appName_widget.dart';
-import 'package:rota_segura_app/widgets/button_widget.dart';
-import 'package:rota_segura_app/widgets/inputPassword_widget.dart';
-import 'package:rota_segura_app/widgets/input_widget.dart';
+import 'package:rota_segura_app/widgets/appName.dart';
+import 'package:rota_segura_app/widgets/button.dart';
+import 'package:rota_segura_app/widgets/inputPassword.dart';
+import 'package:rota_segura_app/widgets/input.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -161,6 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             padding: const EdgeInsets.only(top: 50),
                             child: Button(
                                 title: 'confirmar',
+                                colors: [0xff004F77, 0xff3DBEFF],
                                 function: () {
                                   if (_formKey.currentState!.validate()) {
                                     ScaffoldMessenger.of(context).showSnackBar(

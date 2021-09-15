@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 //widgets
-import 'package:rota_segura_app/widgets/appName_widget.dart';
-import 'package:rota_segura_app/widgets/button_widget.dart';
-import 'package:rota_segura_app/widgets/inputPassword_widget.dart';
-import 'package:rota_segura_app/widgets/input_widget.dart';
+import 'package:rota_segura_app/widgets/appName.dart';
+import 'package:rota_segura_app/widgets/button.dart';
+import 'package:rota_segura_app/widgets/inputPassword.dart';
+import 'package:rota_segura_app/widgets/input.dart';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
 
 //models
-import 'package:rota_segura_app/models/user_model.dart';
+import 'package:rota_segura_app/models/user.dart';
 
 //screens
 import 'package:rota_segura_app/screens/home.dart';
@@ -30,8 +30,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        //rolagem da página
         body: SingleChildScrollView(
-            //rolagem da página
             child: Container(
                 child: Column(
       children: <Widget>[
@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.only(top: 50),
                         child: Button(
                             title: 'entrar',
+                            colors: [0xff004F77, 0xff3DBEFF],
                             //função passada para onPressed do button
                             function: () {
                               if (_formKey.currentState!.validate()) {
@@ -108,8 +109,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       backgroundColor: Colors.red,
-                                      content:
-                                          Text('Email ou senha inválidos!')),
+                                      content: Text(
+                                          'Algo deu errado ao entrar! Tente novamente...')),
                                 );
                               });
                             }));

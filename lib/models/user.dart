@@ -86,6 +86,7 @@ class UserModel extends Model {
   }
 
   Map<String, dynamic> getUserData() {
+    _loadUserData();
     return this._userData!;
   }
 
