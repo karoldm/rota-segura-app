@@ -44,7 +44,7 @@ class UserModel extends Model {
         ._auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      this._user = _auth.currentUser; //usuário logado atualmente
+      this._user = _auth.currentUser;
       success();
     }).catchError((e) {
       print(e);
@@ -77,25 +77,19 @@ class UserModel extends Model {
     });
   }
 
-  Future<Null> _loadUserData() async {
+  Future loadUserData() async {}
+
+  Future<Map<String, dynamic>> getUserData() async {
     await this._db.collection('users').doc(this._user!.uid).get().then((value) {
       this._userData = value.data();
     }).catchError((e) {
       print(e);
     });
-  }
-
-  Map<String, dynamic> getUserData() {
-    _loadUserData();
     return this._userData!;
   }
 
   bool isLoggedIn() {
     this._user = _auth.currentUser;
-    if (_user != null) {
-      _loadUserData();
-      return true;
-    }
-    return false;
+    return this._user != null;
   }
 }
