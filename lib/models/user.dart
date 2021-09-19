@@ -55,15 +55,19 @@ class UserModel extends Model {
   void editPasswordUser(String oldPassword, String newPassword,
       VoidCallback? success(), VoidCallback? fail()) {}
 
-  void editUser(Map<String, dynamic> data, String password,
-      VoidCallback? success(), VoidCallback? fail()) async {
+  void editUser(Map<String, dynamic> data, VoidCallback? success(),
+      VoidCallback? fail()) async {
     await _db
         .collection('users')
         .doc(_user!
             .uid) //buscando usuário pelo uid (_user sempre armazena o usuário logado atualmente)
         .update(data)
-        .then((value) {})
-        .catchError((e) {});
+        .then((value) {
+      success();
+    }).catchError((e) {
+      print(e);
+      fail();
+    });
   }
 
   void logout(VoidCallback? success(), VoidCallback? fail()) async {
