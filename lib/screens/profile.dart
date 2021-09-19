@@ -154,8 +154,8 @@ class EditPageState extends State<EditPage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 30, 0, 0),
                                         child: Input(
-                                          readOnly: false,
-                                          textType: TextInputType.datetime,
+                                          readOnly: true,
+                                          textType: TextInputType.number,
                                           placeholder: 'CPF',
                                           controller: _cpfController,
                                         ),
@@ -164,8 +164,8 @@ class EditPageState extends State<EditPage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 30, 0, 0),
                                         child: Input(
-                                          readOnly: false,
-                                          textType: TextInputType.datetime,
+                                          readOnly: true,
+                                          textType: TextInputType.emailAddress,
                                           placeholder: 'email',
                                           controller: _emailController,
                                         ),
