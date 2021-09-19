@@ -26,6 +26,8 @@ class EditPage extends StatefulWidget {
 class EditPageState extends State<EditPage> {
   final _formKey = GlobalKey<FormState>();
   Map<String, dynamic> dataUser = {};
+  bool _readOnly = true;
+  int _buttonColor = 0xff3DBEFF;
 
   var _nameController;
   var _telController;
@@ -36,6 +38,20 @@ class EditPageState extends State<EditPage> {
   var _cidadeController;
   var _estadoController;
   var _emailController;
+
+  void _toggleReadOnly() {
+    setState(() {
+      _readOnly = !_readOnly;
+    });
+  }
+
+  void _enabledButton() {
+    setState(() {
+      _buttonColor == 0xff3DBEFF
+          ? _buttonColor = 0xff004F77
+          : _buttonColor = 0xff3DBEFF;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,8 +104,11 @@ class EditPageState extends State<EditPage> {
                                 children: <Widget>[
                                   Button(
                                       title: 'Editar dados',
-                                      function: () => null,
-                                      colors: [0xff3DBEFF, 0xff3DBEFF]),
+                                      function: () {
+                                        _toggleReadOnly();
+                                        _enabledButton();
+                                      },
+                                      colors: [_buttonColor, _buttonColor]),
                                   SizedBox(width: 10),
                                   Button(
                                       title: 'Mudar senha',
@@ -105,6 +124,7 @@ class EditPageState extends State<EditPage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 30, 0, 0),
                                         child: Input(
+                                          readOnly: _readOnly,
                                           textType: TextInputType.text,
                                           placeholder: 'nome completo',
                                           controller: _nameController,
@@ -114,6 +134,7 @@ class EditPageState extends State<EditPage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 30, 0, 0),
                                         child: Input(
+                                          readOnly: _readOnly,
                                           textType: TextInputType.number,
                                           placeholder: 'telefone',
                                           controller: _telController,
@@ -123,87 +144,37 @@ class EditPageState extends State<EditPage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 30, 0, 0),
                                         child: Input(
+                                          readOnly: _readOnly,
                                           textType: TextInputType.datetime,
                                           placeholder: 'nascimento',
                                           controller: _birthController,
                                         ),
                                       ),
                                       Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 30, 0, 0),
-                                          child: TextFormField(
-                                              validator: (value) {
-                                                //verificando se o campo foi preenchido
-                                                if (value == null ||
-                                                    value.isEmpty) {
-                                                  return 'Esse campo precisa ser preenchido';
-                                                }
-                                                return null;
-                                              },
-                                              style: TextStyle(
-                                                  color: Colors.grey.shade500),
-                                              readOnly: true,
-                                              keyboardType: TextInputType
-                                                  .number, //tipo do teclado
-                                              cursorColor: Colors.black,
-                                              textAlignVertical:
-                                                  TextAlignVertical.center,
-                                              controller: _cpfController,
-                                              textAlign: TextAlign.left,
-                                              decoration: InputDecoration(
-                                                  enabledBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.black)),
-                                                  focusedBorder:
-                                                      UnderlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  color: Colors
-                                                                      .black)),
-                                                  hintText: 'CPF',
-                                                  hintStyle: TextStyle(
-                                                      color: Colors.black
-                                                          .withOpacity(0.6))))),
-                                      Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 30, 0, 0),
-                                          child: TextFormField(
-                                              validator: (value) {
-                                                //verificando se o campo foi preenchido
-                                                if (value == null ||
-                                                    value.isEmpty) {
-                                                  return 'Esse campo precisa ser preenchido';
-                                                }
-                                                return null;
-                                              },
-                                              style: TextStyle(
-                                                  color: Colors.grey.shade500),
-                                              readOnly: true,
-                                              keyboardType: TextInputType
-                                                  .emailAddress, //tipo do teclado
-                                              cursorColor: Colors.black,
-                                              textAlignVertical:
-                                                  TextAlignVertical.center,
-                                              controller: _emailController,
-                                              textAlign: TextAlign.left,
-                                              decoration: InputDecoration(
-                                                  enabledBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.black)),
-                                                  focusedBorder:
-                                                      UnderlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  color: Colors
-                                                                      .black)),
-                                                  hintText: 'email',
-                                                  hintStyle: TextStyle(
-                                                      color: Colors.black
-                                                          .withOpacity(0.6))))),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 30, 0, 0),
+                                        child: Input(
+                                          readOnly: false,
+                                          textType: TextInputType.datetime,
+                                          placeholder: 'CPF',
+                                          controller: _cpfController,
+                                        ),
+                                      ),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 30, 0, 0),
                                         child: Input(
+                                          readOnly: false,
+                                          textType: TextInputType.datetime,
+                                          placeholder: 'email',
+                                          controller: _emailController,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 30, 0, 0),
+                                        child: Input(
+                                          readOnly: _readOnly,
                                           textType: TextInputType.text,
                                           placeholder: 'endereço',
                                           controller: _enderecoController,
@@ -213,6 +184,7 @@ class EditPageState extends State<EditPage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 30, 0, 0),
                                         child: Input(
+                                          readOnly: _readOnly,
                                           textType: TextInputType.text,
                                           placeholder: 'bairro',
                                           controller: _bairroController,
@@ -222,6 +194,7 @@ class EditPageState extends State<EditPage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 30, 0, 0),
                                         child: Input(
+                                          readOnly: _readOnly,
                                           textType: TextInputType.text,
                                           placeholder: 'cidade',
                                           controller: _cidadeController,
@@ -231,6 +204,7 @@ class EditPageState extends State<EditPage> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 30, 0, 0),
                                         child: Input(
+                                          readOnly: _readOnly,
                                           textType: TextInputType.text,
                                           placeholder: 'estado',
                                           controller: _estadoController,

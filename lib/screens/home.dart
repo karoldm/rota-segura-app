@@ -109,7 +109,6 @@ class HomePageState extends State<HomePage> {
                               target: _initialCamera,
                             ),
                             myLocationEnabled: true,
-                            liteModeEnabled: true,
                             mapToolbarEnabled: false,
                             //setClickable: false //desativar eventos de click
                           );

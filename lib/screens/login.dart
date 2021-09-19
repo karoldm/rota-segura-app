@@ -67,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     //email input
                     padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                     child: Input(
+                      readOnly: false,
                       textType: TextInputType.emailAddress,
                       placeholder: 'email',
                       controller: _emailController,

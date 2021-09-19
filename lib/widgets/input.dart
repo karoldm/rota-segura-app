@@ -4,13 +4,15 @@ class Input extends StatefulWidget {
   final String placeholder;
   final TextEditingController controller;
   final TextInputType textType;
+  final bool readOnly;
 
-  const Input({
-    Key? key,
-    required this.placeholder,
-    required this.controller,
-    required this.textType,
-  }) : super(key: key);
+  Input(
+      {Key? key,
+      required this.placeholder,
+      required this.controller,
+      required this.textType,
+      required this.readOnly})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _InputState();
@@ -27,6 +29,7 @@ class _InputState extends State<Input> {
           }
           return null;
         },
+        readOnly: widget.readOnly,
         keyboardType: widget.textType, //tipo do teclado
         cursorColor: Colors.black,
         textAlignVertical: TextAlignVertical.center,

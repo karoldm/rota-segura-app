@@ -77,6 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Input(
+                          readOnly: false,
                           textType: TextInputType.text,
                           placeholder: 'nome completo',
                           controller: _nameController,
@@ -85,6 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Input(
+                          readOnly: false,
                           textType: TextInputType.number,
                           placeholder: 'telefone',
                           controller: _telController,
@@ -93,6 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Input(
+                          readOnly: false,
                           textType: TextInputType.number,
                           placeholder: 'CPF',
                           controller: _cpfController,
@@ -101,6 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Input(
+                          readOnly: false,
                           textType: TextInputType.datetime,
                           placeholder: 'nascimento',
                           controller: _birthController,
@@ -110,6 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Input(
+                          readOnly: false,
                           textType: TextInputType.text,
                           placeholder: 'endereço',
                           controller: _enderecoController,
@@ -118,6 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Input(
+                          readOnly: false,
                           textType: TextInputType.text,
                           placeholder: 'bairro',
                           controller: _bairroController,
@@ -126,6 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Input(
+                          readOnly: false,
                           textType: TextInputType.text,
                           placeholder: 'cidade',
                           controller: _cidadeController,
@@ -134,6 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Input(
+                          readOnly: false,
                           textType: TextInputType.text,
                           placeholder: 'estado',
                           controller: _estadoController,
@@ -143,6 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Input(
+                          readOnly: false,
                           textType: TextInputType.emailAddress,
                           placeholder: 'email',
                           controller: _emailController,
