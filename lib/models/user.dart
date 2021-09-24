@@ -52,8 +52,24 @@ class UserModel extends Model {
     });
   }
 
-  void editPasswordUser(String oldPassword, String newPassword,
-      VoidCallback? success(), VoidCallback? fail()) {}
+  void editPasswordUser(String password, String newPassword,
+      VoidCallback? success(), VoidCallback? fail()) async {
+    this._user = _auth.currentUser;
+    final cred = EmailAuthProvider.credential(
+        email: this._user!.email!, password: password);
+
+    this._user!.reauthenticateWithCredential(cred).then((value) {
+      this._user!.updatePassword(newPassword).then((value) {
+        success();
+      }).catchError((e) {
+        print(e);
+        fail();
+      });
+    }).catchError((e) {
+      print(e);
+      fail();
+    });
+  }
 
   void editUser(Map<String, dynamic> data, VoidCallback? success(),
       VoidCallback? fail()) async {
@@ -80,8 +96,6 @@ class UserModel extends Model {
       fail();
     });
   }
-
-  Future loadUserData() async {}
 
   Future<Map<String, dynamic>> getUserData() async {
     await this._db.collection('users').doc(this._user!.uid).get().then((value) {

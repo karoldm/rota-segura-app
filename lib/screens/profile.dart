@@ -25,9 +25,13 @@ class EditPage extends StatefulWidget {
 
 class EditPageState extends State<EditPage> {
   final _formKey = GlobalKey<FormState>();
+  final _formPasswordKey = GlobalKey<FormState>();
+
   Map<String, dynamic> dataUser = {};
   bool _readOnly = true;
-  int _buttonColor = 0xff3DBEFF;
+  int _buttonEditColor = 0xff3DBEFF;
+  int _buttonPasswordColor = 0xff3DBEFF;
+  bool _editScreen = true;
 
   var _nameController;
   var _telController;
@@ -39,17 +43,35 @@ class EditPageState extends State<EditPage> {
   var _estadoController;
   var _emailController;
 
+  var _passwordController = TextEditingController();
+  var _newPasswordController = TextEditingController();
+
   void _toggleReadOnly() {
     setState(() {
       _readOnly = !_readOnly;
     });
   }
 
-  void _enabledButton() {
+  void _enabledEditButton() {
     setState(() {
-      _buttonColor == 0xff3DBEFF
-          ? _buttonColor = 0xff004F77
-          : _buttonColor = 0xff3DBEFF;
+      _buttonEditColor == 0xff3DBEFF
+          ? _buttonEditColor = 0xff004F77
+          : _buttonEditColor = 0xff3DBEFF;
+      _buttonPasswordColor = 0xff3DBEFF;
+      _editScreen = true;
+    });
+  }
+
+  void _enabledPasswordButton() {
+    setState(() {
+      _editScreen = false;
+      _buttonPasswordColor = 0xff004F77;
+      _buttonEditColor = 0xff3DBEFF;
+      if (_readOnly == false) {
+        _readOnly = true;
+      }
+      _passwordController.text = "";
+      _newPasswordController.text = "";
     });
   }
 
@@ -106,183 +128,25 @@ class EditPageState extends State<EditPage> {
                                       title: 'Editar dados',
                                       function: () {
                                         _toggleReadOnly();
-                                        _enabledButton();
+                                        _enabledEditButton();
                                       },
-                                      colors: [_buttonColor, _buttonColor]),
+                                      colors: [
+                                        _buttonEditColor,
+                                        _buttonEditColor
+                                      ]),
                                   SizedBox(width: 10),
                                   Button(
                                       title: 'Mudar senha',
-                                      function: () => null,
-                                      colors: [0xff3DBEFF, 0xff3DBEFF])
+                                      function: () {
+                                        _enabledPasswordButton();
+                                      },
+                                      colors: [
+                                        _buttonPasswordColor,
+                                        _buttonPasswordColor
+                                      ])
                                 ],
                               )),
-                              Form(
-                                  key: _formKey,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 30, 0, 0),
-                                        child: Input(
-                                          readOnly: _readOnly,
-                                          textType: TextInputType.text,
-                                          placeholder: 'nome completo',
-                                          controller: _nameController,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 30, 0, 0),
-                                        child: Input(
-                                          readOnly: _readOnly,
-                                          textType: TextInputType.number,
-                                          placeholder: 'telefone',
-                                          controller: _telController,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 30, 0, 0),
-                                        child: Input(
-                                          readOnly: _readOnly,
-                                          textType: TextInputType.datetime,
-                                          placeholder: 'nascimento',
-                                          controller: _birthController,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 30, 0, 0),
-                                        child: Input(
-                                          readOnly: true,
-                                          textType: TextInputType.number,
-                                          placeholder: 'CPF',
-                                          controller: _cpfController,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 30, 0, 0),
-                                        child: Input(
-                                          readOnly: true,
-                                          textType: TextInputType.emailAddress,
-                                          placeholder: 'email',
-                                          controller: _emailController,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 30, 0, 0),
-                                        child: Input(
-                                          readOnly: _readOnly,
-                                          textType: TextInputType.text,
-                                          placeholder: 'endereço',
-                                          controller: _enderecoController,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 30, 0, 0),
-                                        child: Input(
-                                          readOnly: _readOnly,
-                                          textType: TextInputType.text,
-                                          placeholder: 'bairro',
-                                          controller: _bairroController,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 30, 0, 0),
-                                        child: Input(
-                                          readOnly: _readOnly,
-                                          textType: TextInputType.text,
-                                          placeholder: 'cidade',
-                                          controller: _cidadeController,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 30, 0, 0),
-                                        child: Input(
-                                          readOnly: _readOnly,
-                                          textType: TextInputType.text,
-                                          placeholder: 'estado',
-                                          controller: _estadoController,
-                                        ),
-                                      ),
-                                      ScopedModelDescendant<UserModel>(
-                                          builder: (context, child, model) {
-                                        return Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 50),
-                                            child: Button(
-                                                title: 'confirmar',
-                                                colors: [
-                                                  0xff004F77,
-                                                  0xff3DBEFF
-                                                ],
-                                                function: () {
-                                                  if (_formKey.currentState!
-                                                      .validate()) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      const SnackBar(
-                                                          content: Text(
-                                                              'Atualizando dados...')),
-                                                    );
-                                                  }
-
-                                                  final Map<String, dynamic>
-                                                      data = {
-                                                    'name':
-                                                        _nameController.text,
-                                                    'tel': _telController.text,
-                                                    'cpf': _cpfController.text,
-                                                    'birth':
-                                                        _birthController.text,
-                                                    'adress': {
-                                                      'endereco':
-                                                          _enderecoController
-                                                              .text,
-                                                      'bairro':
-                                                          _bairroController
-                                                              .text,
-                                                      'cidade':
-                                                          _cidadeController
-                                                              .text,
-                                                      'estado':
-                                                          _estadoController.text
-                                                    },
-                                                    'email':
-                                                        _emailController.text,
-                                                  };
-
-                                                  model.editUser(data, () {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                            const SnackBar(
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .green,
-                                                                content: Text(
-                                                                    'Dados atualizados com sucesso!')));
-                                                  }, () {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      const SnackBar(
-                                                          backgroundColor:
-                                                              Colors.red,
-                                                          content: Text(
-                                                              'Algo deu errado ao atualizar, tente novamente!')),
-                                                    );
-                                                  });
-                                                }));
-                                      })
-                                    ],
-                                  )),
+                              _editScreen == true ? editForm() : passwordForm()
                             ],
                           ))));
             } else {
@@ -290,5 +154,198 @@ class EditPageState extends State<EditPage> {
             }
           });
     });
+  }
+
+  Widget passwordForm() {
+    return Form(
+        key: _formPasswordKey,
+        child: Column(children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            child: InputPassword(
+              placeholder: 'senha atual',
+              controller: _passwordController,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            child: InputPassword(
+              placeholder: 'nova senha',
+              controller: _newPasswordController,
+            ),
+          ),
+          ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+            return Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: Button(
+                    title: 'confirmar',
+                    colors: [0xff004F77, 0xff3DBEFF],
+                    function: () {
+                      if (_formPasswordKey.currentState!.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Atualizando senha...')),
+                        );
+                      }
+
+                      final String password = _passwordController.text;
+                      final String newPassword = _newPasswordController.text;
+
+                      model.editPasswordUser(password, newPassword, () {
+                        _readOnly = false;
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text(
+                                'Senha atualizados com sucesso! Por favor faça o login novamente.')));
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                //mandando usuário para a página de perfil
+                                builder: (context) => LoginPage()));
+                      }, () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                  'Algo deu errado ao atualizar, tente novamente!')),
+                        );
+                      });
+                    }));
+          })
+        ]));
+  }
+
+  Widget editForm() {
+    return Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Input(
+                readOnly: _readOnly,
+                textType: TextInputType.text,
+                placeholder: 'nome completo',
+                controller: _nameController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Input(
+                readOnly: _readOnly,
+                textType: TextInputType.number,
+                placeholder: 'telefone',
+                controller: _telController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Input(
+                readOnly: _readOnly,
+                textType: TextInputType.datetime,
+                placeholder: 'nascimento',
+                controller: _birthController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Input(
+                readOnly: true,
+                textType: TextInputType.number,
+                placeholder: 'CPF',
+                controller: _cpfController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Input(
+                readOnly: true,
+                textType: TextInputType.emailAddress,
+                placeholder: 'email',
+                controller: _emailController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Input(
+                readOnly: _readOnly,
+                textType: TextInputType.text,
+                placeholder: 'endereço',
+                controller: _enderecoController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Input(
+                readOnly: _readOnly,
+                textType: TextInputType.text,
+                placeholder: 'bairro',
+                controller: _bairroController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Input(
+                readOnly: _readOnly,
+                textType: TextInputType.text,
+                placeholder: 'cidade',
+                controller: _cidadeController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Input(
+                readOnly: _readOnly,
+                textType: TextInputType.text,
+                placeholder: 'estado',
+                controller: _estadoController,
+              ),
+            ),
+            ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+              return Padding(
+                  padding: const EdgeInsets.only(top: 50),
+                  child: Button(
+                      title: 'confirmar',
+                      colors: [0xff004F77, 0xff3DBEFF],
+                      function: () {
+                        if (_formKey.currentState!.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Atualizando dados...')),
+                          );
+                        }
+
+                        final Map<String, dynamic> data = {
+                          'name': _nameController.text,
+                          'tel': _telController.text,
+                          'cpf': _cpfController.text,
+                          'birth': _birthController.text,
+                          'adress': {
+                            'endereco': _enderecoController.text,
+                            'bairro': _bairroController.text,
+                            'cidade': _cidadeController.text,
+                            'estado': _estadoController.text
+                          },
+                          'email': _emailController.text,
+                        };
+
+                        model.editUser(data, () {
+                          _readOnly = false;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content:
+                                      Text('Dados atualizados com sucesso!')));
+                        }, () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                    'Algo deu errado ao atualizar, tente novamente!')),
+                          );
+                        });
+                      }));
+            })
+          ],
+        ));
   }
 }
