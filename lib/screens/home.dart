@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   Map<String, dynamic> dataUser = {};
-  final LatLng _initialCamera = const LatLng(45.521563, -122.677433);
+  final LatLng _initialCamera = const LatLng(0.0, 0.0);
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +35,21 @@ class HomePageState extends State<HomePage> {
             if (snapshot.hasData) {
               dataUser = snapshot.data!;
               return Scaffold(
+                backgroundColor: Colors.white,
                 drawer: Drawer(
                     child: ListView(children: <Widget>[
                   DrawerHeader(
                     child: Text(
-                      'bem vindo ' + dataUser['name'],
+                      'Bem Vindo(a) ' + dataUser['name'],
+                      textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 20.0),
                     ),
-                    decoration: BoxDecoration(color: Color(0xff00AAFF)),
+                    decoration: BoxDecoration(
+                        color: Color(0xff00AAFF),
+                        image: DecorationImage(
+                            image: AssetImage("images/mapMarker.png"),
+                            fit: BoxFit.cover,
+                            alignment: Alignment.topCenter)),
                   ),
                   ListTile(
                     leading: Icon(Icons.settings, color: Colors.black),
@@ -88,7 +95,7 @@ class HomePageState extends State<HomePage> {
                       ),
                     ),
                   ],
-                  backgroundColor: Color(0xff00AAFF),
+                  backgroundColor: Color(0xff3dbeff),
                   title: Text(
                     "Rota Segura",
                     style: TextStyle(fontSize: 25),
