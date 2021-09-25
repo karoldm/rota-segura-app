@@ -110,6 +110,7 @@ class EditPageState extends State<EditPage> {
                         ),
                       ),
                     ],
+                    backgroundColor: Color(0xff3dbeff),
                     title: Text(
                       "Rota Segura",
                       style: TextStyle(fontSize: 25),

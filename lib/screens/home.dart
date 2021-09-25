@@ -115,9 +115,8 @@ class HomePageState extends State<HomePage> {
                             initialCameraPosition: CameraPosition(
                               target: _initialCamera,
                             ),
-                            myLocationEnabled: true,
                             mapToolbarEnabled: false,
-                            //setClickable: false //desativar eventos de click
+                            zoomControlsEnabled: false,
                           );
                         })),
                     Padding(
