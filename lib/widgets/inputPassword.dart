@@ -27,6 +27,8 @@ class _InputPasswordState extends State<InputPassword> {
           //verificando se o campo foi preenchido
           if (value == null || value.isEmpty) {
             return 'Esse campo precisa ser preenchido';
+          } else if (value.length < 6) {
+            return 'A senha deve conter mais de seis caracteres';
           }
           return null;
         },
