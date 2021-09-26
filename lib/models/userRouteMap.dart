@@ -1,4 +1,4 @@
-import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -36,8 +36,8 @@ class UserRouteMap extends Model {
     });
   }
 
-  void addPolyline(LatLng marker) {
-    _addMarker(marker);
+  void addPolyline({LatLng? marker}) {
+    if (marker != null) _addMarker(marker);
     this.polyline.add(Polyline(
         polylineId: PolylineId(this._polylineId),
         color: Colors.black,
@@ -58,7 +58,7 @@ class UserRouteMap extends Model {
     await _db
         .collection('users')
         .doc(user!.uid)
-        .update({"route": polylinePoints.toString()}).then((value) {
+        .update({"route": json.encode(this.polylinePoints)}).then((value) {
       success();
     }).catchError((e) {
       print(e);
@@ -66,8 +66,7 @@ class UserRouteMap extends Model {
     });
   }
 
-  /*
-    Future<Polyline> getPolyline() async {
+  Future<Set<Polyline>> getPolyline() async {
     final user = _auth.currentUser;
     Map<String, dynamic> data = {};
     await _db.collection('users').doc(user!.uid).get().then((value) {
@@ -75,10 +74,21 @@ class UserRouteMap extends Model {
     }).catchError((e) {
       print(e);
     });
-    this.polyline = data['route'];
+
+    try {
+      List listCoordinates = json.decode(data['route']);
+      this.polylinePoints = [];
+      listCoordinates.forEach((coordinate) {
+        this.polylinePoints.add(LatLng(coordinate[0], coordinate[1]));
+      });
+      addPolyline();
+    } catch (err) {
+      print(err);
+    }
     return this.polyline;
   }
 
+  /*
   Polyline getPolyline(){} //array de latLng para desenhar a rota
 
   void deletePolyline(){}
