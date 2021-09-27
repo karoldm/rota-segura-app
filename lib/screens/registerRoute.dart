@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //libraries
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:rota_segura_app/screens/home.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 //models
@@ -18,13 +19,17 @@ class RegisterRoutePage extends StatefulWidget {
 class _RegisterRoutePageState extends State<RegisterRoutePage> {
   final LatLng _initialCamera = const LatLng(0.0, 0.0);
 
-  bool _onTapMap = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
+            onPressed: () => Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomePage())),
+          ),
           elevation: 0.0,
           actions: <Widget>[
             Container(
@@ -49,7 +54,6 @@ class _RegisterRoutePageState extends State<RegisterRoutePage> {
               child: Stack(children: <Widget>[
             GoogleMap(
                 onMapCreated: model.onMapCreated,
-                markers: model.markers,
                 polylines: model.polyline,
                 initialCameraPosition: CameraPosition(
                   target: _initialCamera,
@@ -57,7 +61,7 @@ class _RegisterRoutePageState extends State<RegisterRoutePage> {
                 zoomControlsEnabled: false,
                 onTap: (point) {
                   setState(() {
-                    model.addPolyline(point);
+                    model.addPolyline(marker: point);
                   });
                 }),
             Align(
@@ -71,9 +75,38 @@ class _RegisterRoutePageState extends State<RegisterRoutePage> {
                           function: () {
                             if (model.polylinePoints != []) {
                               model.storePolyline(() {
-                                print("armazenado");
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          title: Text("Atualizar rota"),
+                                          content: Text(
+                                              "Rota atualizada com sucesso!"),
+                                          actions: <Widget>[
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              HomePage()));
+                                                },
+                                                child: Text("Ok"))
+                                          ],
+                                        ));
                               }, () {
-                                print("falhou");
+                                AlertDialog(
+                                    title: Text("Atualização de rota"),
+                                    content: Text(
+                                        "Algo deu errado ao atuaizar a rota! tente novamente..."),
+                                    actions: <Widget>[
+                                      TextButton(
+                                          child: const Text('ok'),
+                                          onPressed: () {
+                                            setState(() {
+                                              model.clearMap();
+                                            });
+                                          })
+                                    ]);
                               });
                             }
                           },
@@ -82,8 +115,13 @@ class _RegisterRoutePageState extends State<RegisterRoutePage> {
                         width: 10,
                       ),
                       Button(
-                          title: "deletar rota",
-                          function: () {},
+                          title: "cancelar",
+                          function: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()));
+                          },
                           colors: [0xffDB0000, 0xffFF7272]),
                     ],
                   ),
