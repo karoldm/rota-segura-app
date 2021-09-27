@@ -59,6 +59,7 @@ class UserRouteMap extends Model {
         .collection('users')
         .doc(user!.uid)
         .update({"route": json.encode(this.polylinePoints)}).then((value) {
+      clearMap();
       success();
     }).catchError((e) {
       print(e);
@@ -77,7 +78,8 @@ class UserRouteMap extends Model {
 
     try {
       List listCoordinates = json.decode(data['route']);
-      this.polylinePoints = [];
+      this.polylinePoints.clear();
+      this.polyline.clear();
       listCoordinates.forEach((coordinate) {
         this.polylinePoints.add(LatLng(coordinate[0], coordinate[1]));
       });
@@ -88,10 +90,13 @@ class UserRouteMap extends Model {
     return this.polyline;
   }
 
-  /*
-  Polyline getPolyline(){} //array de latLng para desenhar a rota
+  void clearMap() {
+    this.polyline.clear();
+    this.markers.clear();
+    this.polylinePoints.clear();
+  }
 
-  void deletePolyline(){}
+  /*
 
   void createInfoMarker(LatLng latLng, String infoText /*Imagem?*/){} //recebe a latLng como key
 
