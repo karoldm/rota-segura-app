@@ -129,6 +129,7 @@ class HomePageState extends State<HomePage> {
                                 return (GoogleMap(
                                   onMapCreated: mapModel.onMapCreated,
                                   polylines: mapModel.polyline,
+                                  markers: mapModel.markers,
                                   initialCameraPosition: CameraPosition(
                                     target: _initialCamera,
                                   ),

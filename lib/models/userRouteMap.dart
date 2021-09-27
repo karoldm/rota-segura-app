@@ -50,7 +50,6 @@ class UserRouteMap extends Model {
     this._markersIdCount++;
     this.markers.add(Marker(markerId: MarkerId(markerId), position: position));
     polylinePoints.add(position);
-    //ontap event on marker
   }
 
   void storePolyline(VoidCallback? success(), VoidCallback? fail()) async {
@@ -78,10 +77,9 @@ class UserRouteMap extends Model {
 
     try {
       List listCoordinates = json.decode(data['route']);
-      this.polylinePoints.clear();
-      this.polyline.clear();
+      clearMap();
       listCoordinates.forEach((coordinate) {
-        this.polylinePoints.add(LatLng(coordinate[0], coordinate[1]));
+        _addMarker(LatLng(coordinate[0], coordinate[1]));
       });
       addPolyline();
     } catch (err) {
