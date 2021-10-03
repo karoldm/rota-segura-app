@@ -61,7 +61,7 @@ class _RegisterRoutePageState extends State<RegisterRoutePage> {
                 zoomControlsEnabled: false,
                 onTap: (point) {
                   setState(() {
-                    model.addPolyline(marker: point);
+                    model.addPolyline(point: point);
                   });
                 }),
             Align(

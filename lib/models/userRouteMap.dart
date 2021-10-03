@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
@@ -16,6 +15,8 @@ class UserRouteMap extends Model {
   FirebaseFirestore _db = FirebaseFirestore.instance;
   late GoogleMapController _mapController;
   Location _location = Location();
+
+  String? enabledMarker;
 
   Set<Marker> markers = {};
   int _markersIdCount = 1;
@@ -36,8 +37,8 @@ class UserRouteMap extends Model {
     });
   }
 
-  void addPolyline({LatLng? marker}) {
-    if (marker != null) _addMarker(marker);
+  void addPolyline({LatLng? point}) {
+    if (point != null) polylinePoints.add(point);
     this.polyline.add(Polyline(
         polylineId: PolylineId(this._polylineId),
         color: Colors.black,
@@ -45,10 +46,17 @@ class UserRouteMap extends Model {
         points: this.polylinePoints));
   }
 
-  void _addMarker(LatLng position) {
+  void _addMarker(LatLng position, VoidCallback? enableModal()) {
     final String markerId = 'marker_id_${this._markersIdCount}';
     this._markersIdCount++;
-    this.markers.add(Marker(markerId: MarkerId(markerId), position: position));
+    this.markers.add(Marker(
+        markerId: MarkerId(markerId),
+        position: position,
+        onTap: () {
+          this.enabledMarker =
+              [position.latitude, position.longitude].toString();
+          enableModal();
+        }));
     polylinePoints.add(position);
   }
 
@@ -66,7 +74,7 @@ class UserRouteMap extends Model {
     });
   }
 
-  Future<Set<Polyline>> getPolyline() async {
+  Future<Set<Polyline>> getPolyline(VoidCallback? enableModal()) async {
     final user = _auth.currentUser;
     Map<String, dynamic> data = {};
     await _db.collection('users').doc(user!.uid).get().then((value) {
@@ -79,11 +87,11 @@ class UserRouteMap extends Model {
       List listCoordinates = json.decode(data['route']);
       clearMap();
       listCoordinates.forEach((coordinate) {
-        _addMarker(LatLng(coordinate[0], coordinate[1]));
+        _addMarker(LatLng(coordinate[0], coordinate[1]), enableModal);
       });
       addPolyline();
-    } catch (err) {
-      print(err);
+    } catch (e) {
+      print(e);
     }
     return this.polyline;
   }
@@ -92,15 +100,84 @@ class UserRouteMap extends Model {
     this.polyline.clear();
     this.markers.clear();
     this.polylinePoints.clear();
+  } //recebe a latLng como key
+
+  void createInfoMarker(
+      VoidCallback? success(), VoidCallback? fail(), String text) async {
+    final user = _auth.currentUser;
+
+    Map<String, dynamic> data = {};
+    List? infoMap = [];
+
+    await _db.collection('users').doc(user!.uid).get().then((value) {
+      data = value.data()!;
+    }).catchError((e) {
+      print(e);
+    });
+
+    try {
+      bool contains = false;
+      infoMap = json.decode(data['markersInfo']);
+      if (infoMap != null) {
+        infoMap.forEach((info) {
+          if (info.containsKey(this.enabledMarker)) {
+            info[this.enabledMarker] = {this.enabledMarker.toString(): text};
+            contains = true;
+          }
+        });
+        if (contains == false) {
+          infoMap.add({this.enabledMarker.toString(): text});
+        }
+      } else {
+        infoMap = [
+          {this.enabledMarker: text}
+        ];
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    await _db
+        .collection('users')
+        .doc(user.uid)
+        .update({'markersInfo': json.encode(infoMap)}).then((value) {
+      clearMap();
+      success();
+    }).catchError((e) {
+      print(e);
+      fail();
+    });
+  }
+
+  Future<String> getTextInfoMarker() async {
+    final user = _auth.currentUser;
+    Map<String, dynamic> data = {};
+    String textInfo = "";
+
+    await _db.collection('users').doc(user!.uid).get().then((value) {
+      data = value.data()!;
+    }).catchError((e) {
+      print(e);
+    });
+
+    try {
+      List infoMap = json.decode(data['markersInfo']);
+      infoMap.forEach((info) {
+        if (info.containsKey(this.enabledMarker))
+          textInfo = info[this.enabledMarker];
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    return textInfo;
   }
 
   /*
 
-  void createInfoMarker(LatLng latLng, String infoText /*Imagem?*/){} //recebe a latLng como key
-
   void editInfoMarker(LatLng latLng, String infoText /*Imagem?*/){}
 
-  Map<LatLng, dynamic> getInfoMarker(){}
 
-  void deleteInfoMarker(){}*/
+  void deleteInfoMarker(){}
+  */
 }

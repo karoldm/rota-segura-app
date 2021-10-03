@@ -4,25 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:rota_segura_app/models/user.dart';
 import 'package:rota_segura_app/models/userRouteMap.dart';
 
+//libraries
+import 'package:scoped_model/scoped_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 //screens
 import 'package:rota_segura_app/screens/login.dart';
 import 'package:rota_segura_app/screens/profile.dart';
 import 'package:rota_segura_app/screens/registerRoute.dart';
-
-//libraries
-import 'package:scoped_model/scoped_model.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:rota_segura_app/screens/infoMarker.dart';
 
 //widgets
 import 'package:rota_segura_app/widgets/button.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  HomePageState createState() => HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   Map<String, dynamic> dataUser = {};
   final LatLng _initialCamera = const LatLng(0.0, 0.0);
 
@@ -120,30 +120,32 @@ class HomePageState extends State<HomePage> {
                       ),
                     ),
                     body: Container(
-                      child: Stack(children: <Widget>[
-                        FutureBuilder(
-                            future: mapModel.getPolyline(),
-                            builder: (context,
-                                AsyncSnapshot<Set<Polyline>> snapshot) {
-                              if (snapshot.hasData) {
-                                return (GoogleMap(
-                                  onMapCreated: mapModel.onMapCreated,
-                                  polylines: mapModel.polyline,
-                                  markers: mapModel.markers,
-                                  initialCameraPosition: CameraPosition(
-                                    target: _initialCamera,
-                                  ),
-                                  zoomControlsEnabled: false,
-                                  mapToolbarEnabled: false,
-                                  myLocationButtonEnabled: true,
-                                ));
-                              } else {
-                                return (Center(
-                                    child: CircularProgressIndicator()));
-                              }
-                            }),
-                      ]),
-                    ));
+                        child: Stack(children: <Widget>[
+                      FutureBuilder(future: mapModel.getPolyline(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                //mandando usuário para a página de perfil
+                                builder: (context) => InfoMarker()));
+                      }), builder:
+                          (context, AsyncSnapshot<Set<Polyline>> snapshot) {
+                        if (snapshot.hasData) {
+                          return (GoogleMap(
+                            onMapCreated: mapModel.onMapCreated,
+                            polylines: mapModel.polyline,
+                            markers: mapModel.markers,
+                            initialCameraPosition: CameraPosition(
+                              target: _initialCamera,
+                            ),
+                            zoomControlsEnabled: false,
+                            mapToolbarEnabled: false,
+                            myLocationButtonEnabled: true,
+                          ));
+                        } else {
+                          return (Center(child: CircularProgressIndicator()));
+                        }
+                      }),
+                    ])));
               } else {
                 return Center(child: CircularProgressIndicator());
               }
