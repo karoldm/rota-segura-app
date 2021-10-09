@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
@@ -107,7 +109,7 @@ class UserRouteMap extends Model {
     final user = _auth.currentUser;
 
     Map<String, dynamic> data = {};
-    List? infoMap = [];
+    Map<String, dynamic> textMarkers = {};
 
     await _db.collection('users').doc(user!.uid).get().then((value) {
       data = value.data()!;
@@ -115,32 +117,16 @@ class UserRouteMap extends Model {
       print(e);
     });
 
-    try {
-      bool contains = false;
-      infoMap = json.decode(data['markersInfo']);
-      if (infoMap != null) {
-        infoMap.forEach((info) {
-          if (info.containsKey(this.enabledMarker)) {
-            info[this.enabledMarker] = {this.enabledMarker.toString(): text};
-            contains = true;
-          }
-        });
-        if (contains == false) {
-          infoMap.add({this.enabledMarker.toString(): text});
-        }
-      } else {
-        infoMap = [
-          {this.enabledMarker: text}
-        ];
-      }
-    } catch (e) {
-      print(e);
+    if (data.containsKey("textMarkers")) {
+      textMarkers = data["textMarkers"];
     }
+
+    textMarkers[this.enabledMarker!.toString()] = text;
 
     await _db
         .collection('users')
         .doc(user.uid)
-        .update({'markersInfo': json.encode(infoMap)}).then((value) {
+        .update({"textMarkers": textMarkers}).then((value) {
       clearMap();
       success();
     }).catchError((e) {
@@ -152,7 +138,8 @@ class UserRouteMap extends Model {
   Future<String> getTextInfoMarker() async {
     final user = _auth.currentUser;
     Map<String, dynamic> data = {};
-    String textInfo = "";
+    Map<String, dynamic> textMarkers = {};
+    String text = "";
 
     await _db.collection('users').doc(user!.uid).get().then((value) {
       data = value.data()!;
@@ -160,17 +147,14 @@ class UserRouteMap extends Model {
       print(e);
     });
 
-    try {
-      List infoMap = json.decode(data['markersInfo']);
-      infoMap.forEach((info) {
-        if (info.containsKey(this.enabledMarker))
-          textInfo = info[this.enabledMarker];
-      });
-    } catch (e) {
-      print(e);
+    if (data.containsKey("textMarkers")) {
+      textMarkers = data["textMarkers"];
+      if (textMarkers.containsKey(this.enabledMarker.toString())) {
+        text = textMarkers[this.enabledMarker.toString()];
+      }
     }
 
-    return textInfo;
+    return text;
   }
 
   /*
