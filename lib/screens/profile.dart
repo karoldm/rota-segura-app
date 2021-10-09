@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:flutter/material.dart';
 
 //libraries
@@ -8,10 +10,8 @@ import 'package:rota_segura_app/models/user.dart';
 
 //screens
 import 'package:rota_segura_app/screens/login.dart';
-import 'package:rota_segura_app/screens/home.dart';
 
 //widgets
-import 'package:rota_segura_app/widgets/appName.dart';
 import 'package:rota_segura_app/widgets/button.dart';
 import 'package:rota_segura_app/widgets/inputPassword.dart';
 import 'package:rota_segura_app/widgets/input.dart';

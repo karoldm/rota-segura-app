@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DividerForm extends StatelessWidget {
-  String text;
+  final String text;
 
   DividerForm({Key? key, required this.text}) : super(key: key);
 
