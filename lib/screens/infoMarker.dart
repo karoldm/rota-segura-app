@@ -76,7 +76,53 @@ class _InfoMarkerState extends State<InfoMarker> {
                           padding: const EdgeInsets.fromLTRB(0, 25.0, 0, 10.0),
                           child: Button(
                               title: "adicionar imagem",
-                              function: () {},
+                              function: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                            content: Text(
+                                              "Adicionar uma imagem",
+                                              style: TextStyle(
+                                                fontSize: 18.0,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            actions: <Widget>[
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: <Widget>[
+                                                  ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              primary: Color(
+                                                                  0xff3DBEFF),
+                                                              elevation: 0),
+                                                      onPressed: () {
+                                                        mapModel.uploadImage(
+                                                            'camera');
+                                                      },
+                                                      child: Text("Camêra",
+                                                          style: TextStyle(
+                                                              fontSize: 16.0))),
+                                                  ElevatedButton(
+                                                      onPressed: () {
+                                                        mapModel.uploadImage(
+                                                            'galeria');
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              primary: Color(
+                                                                  0xff004F77),
+                                                              elevation: 0),
+                                                      child: Text("Galeria",
+                                                          style: TextStyle(
+                                                            fontSize: 16.0,
+                                                          )))
+                                                ],
+                                              )
+                                            ]));
+                              },
                               colors: [0xff8E8A8A, 0xff8E8A8A]),
                         ),
                         Button(

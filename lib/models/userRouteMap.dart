@@ -2,19 +2,25 @@
 
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'dart:io';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 //firebase
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class UserRouteMap extends Model {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _db = FirebaseFirestore.instance;
+  FirebaseStorage _storage = FirebaseStorage.instance;
+
   late GoogleMapController _mapController;
   Location _location = Location();
 
@@ -102,7 +108,7 @@ class UserRouteMap extends Model {
     this.polyline.clear();
     this.markers.clear();
     this.polylinePoints.clear();
-  } //recebe a latLng como key
+  }
 
   void createInfoMarker(
       VoidCallback? success(), VoidCallback? fail(), String text) async {
@@ -157,11 +163,19 @@ class UserRouteMap extends Model {
     return text;
   }
 
-  /*
+  Future<void> uploadImage(String inputSource) async {
+    final user = _auth.currentUser;
 
-  void editInfoMarker(LatLng latLng, String infoText /*Imagem?*/){}
+    final picker = ImagePicker();
+    XFile? pickedImage;
 
+    pickedImage = await picker.pickImage(
+        source:
+            inputSource == 'camera' ? ImageSource.camera : ImageSource.gallery);
 
-  void deleteInfoMarker(){}
-  */
+    final String fileName = path.basename(pickedImage!.path);
+    File imageFile = File(pickedImage.path);
+
+    await _storage.ref('${user!.uid}/$fileName').putFile(imageFile);
+  }
 }
