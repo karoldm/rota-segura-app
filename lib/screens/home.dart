@@ -95,7 +95,16 @@ class _HomePageState extends State<HomePage> {
                                   backgroundColor: Colors.red,
                                   content: Text('Erro ao sair!')));
                         }),
-                      )
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.share, color: Colors.white),
+                        title: Text(
+                          'compartilhar rota',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onTap: () {},
+                        tileColor: Colors.red,
+                      ),
                     ])),
                     appBar: AppBar(
                       centerTitle: true,
