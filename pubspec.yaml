@@ -60,6 +60,15 @@ flutter:
     - images/markermap.png
     - images/mapBackground.png
     - images/iconMarker.png
+    - images/route-1.png
+    - images/route-2.png
+    - images/route-3.png
+    - images/route-4.png
+    - images/route-5.png
+    - images/route-6.png
+    - images/route-7.png
+    - images/marker-1.png
+    - images/marker-2.png
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
