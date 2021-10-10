@@ -20,6 +20,36 @@ class UserModel extends Model {
   //para recuperar dados do db usa-se _user.uid
   Map<String, dynamic>? _userData; //dados do usuario
 
+  void shareRoute(VoidCallback? success(), VoidCallback? fail()) async {
+    await this._db.collection('users').doc(this._user!.uid).get().then((value) {
+      this._userData = value.data();
+    }).catchError((e) {
+      print(e);
+    });
+
+    await _db.collection('chamadas').doc(_user!.uid).get().then((value) async {
+      if (!value.exists) {
+        await _db
+            .collection('chamadas')
+            .doc(_user!.uid)
+            .set(this._userData!)
+            .then((value) {
+          success();
+        }).catchError((e) {
+          print(e);
+          fail();
+        });
+      }
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  bool isAdmin() {
+    //return (this._user!.uid == "1dxrEJGIN4RBtyANdKlhHU38n8J3");
+    return true;
+  }
+
   void signUp(Map<String, dynamic> data, String password,
       VoidCallback? success(), VoidCallback? fail()) async {
     await this

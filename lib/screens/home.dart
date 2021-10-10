@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 //models
 import 'package:rota_segura_app/models/user.dart';
 import 'package:rota_segura_app/models/userRouteMap.dart';
-import 'package:rota_segura_app/screens/help.dart';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 //screens
+import 'package:rota_segura_app/screens/help.dart';
 import 'package:rota_segura_app/screens/login.dart';
 import 'package:rota_segura_app/screens/profile.dart';
 import 'package:rota_segura_app/screens/registerRoute.dart';
@@ -102,7 +102,30 @@ class _HomePageState extends State<HomePage> {
                           'compartilhar rota',
                           style: TextStyle(color: Colors.white),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          userModel.shareRoute(() {
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      title: Text("Compartilhando rota"),
+                                      content: Text(
+                                          "Seus dados assim como as informações da rota até sua residência foram compartilhados! Em breve a ajuda chegará até você."),
+                                      actions: <Widget>[
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("Ok"))
+                                      ],
+                                    ));
+                          }, () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text(
+                                        'Algo deu errado ao compartilhar a rota! tente novamente..')));
+                          });
+                        },
                         tileColor: Colors.red,
                       ),
                     ])),
