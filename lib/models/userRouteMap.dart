@@ -9,7 +9,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
 
 //firebase
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,6 +31,16 @@ class UserRouteMap extends Model {
   Set<Polyline> polyline = {};
   final String _polylineId = 'polyline_id_1';
   List<LatLng> polylinePoints = [];
+
+  late BitmapDescriptor customIcon;
+
+  UserRouteMap() {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(12, 12)), 'images/iconMarker.png')
+        .then((d) {
+      customIcon = d;
+    });
+  }
 
   void onMapCreated(GoogleMapController controller) {
     this._mapController = controller;
@@ -58,6 +67,7 @@ class UserRouteMap extends Model {
     final String markerId = 'marker_id_${this._markersIdCount}';
     this._markersIdCount++;
     this.markers.add(Marker(
+        icon: customIcon,
         markerId: MarkerId(markerId),
         position: position,
         onTap: () {
