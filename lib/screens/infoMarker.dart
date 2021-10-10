@@ -51,7 +51,7 @@ class _InfoMarkerState extends State<InfoMarker> {
                         Container(
                           padding: const EdgeInsets.only(bottom: 20.0),
                           child: Text(
-                            "Utilize esse espaço para adicionar uma imagem e uma descrição do local definido pelo marcador (você pode indicar pontos de referências ou alguma característica que ajude a indentificar o local). Essas informações podem agilizar a chagada de ajuda até você!",
+                            "Utilize esse espaço para adicionar uma imagem e uma descrição do local definido pelo marcador (você pode indicar pontos de referências ou alguma característica que ajude a indentificar o local). Essas informações podem agilizar a chagada de ajuda até você! \n*Ao carregar uma imagem ela será automaticamente salva, mesmo que você cancele a operação!",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 17.0),
                             textAlign: TextAlign.justify,
@@ -72,6 +72,21 @@ class _InfoMarkerState extends State<InfoMarker> {
                                 hintText: "Insira aqui uma descrição do local"),
                           ),
                         ),
+                        Container(
+                            child: FutureBuilder(
+                          future: mapModel.getImage(),
+                          builder: (context, AsyncSnapshot<String> snapshot) {
+                            if (snapshot.hasData) {
+                              return Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      0, 30.0, 0, 10.0),
+                                  child: Image(
+                                      image: NetworkImage(snapshot.data!)));
+                            } else {
+                              return Container();
+                            }
+                          },
+                        )),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 25.0, 0, 10.0),
                           child: Button(
@@ -100,7 +115,11 @@ class _InfoMarkerState extends State<InfoMarker> {
                                                               elevation: 0),
                                                       onPressed: () {
                                                         mapModel.uploadImage(
-                                                            'camera');
+                                                            'camera', () {
+                                                          setState(() {});
+                                                          Navigator.pop(
+                                                              context);
+                                                        });
                                                       },
                                                       child: Text("Camêra",
                                                           style: TextStyle(
@@ -108,7 +127,11 @@ class _InfoMarkerState extends State<InfoMarker> {
                                                   ElevatedButton(
                                                       onPressed: () {
                                                         mapModel.uploadImage(
-                                                            'galeria');
+                                                            'galeria', () {
+                                                          setState(() {});
+                                                          Navigator.pop(
+                                                              context);
+                                                        });
                                                       },
                                                       style: ElevatedButton
                                                           .styleFrom(

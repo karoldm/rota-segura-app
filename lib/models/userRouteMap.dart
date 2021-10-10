@@ -163,7 +163,7 @@ class UserRouteMap extends Model {
     return text;
   }
 
-  Future<void> uploadImage(String inputSource) async {
+  Future<void> uploadImage(String inputSource, VoidCallback? upload()) async {
     final user = _auth.currentUser;
 
     final picker = ImagePicker();
@@ -173,9 +173,21 @@ class UserRouteMap extends Model {
         source:
             inputSource == 'camera' ? ImageSource.camera : ImageSource.gallery);
 
-    final String fileName = path.basename(pickedImage!.path);
-    File imageFile = File(pickedImage.path);
+    File imageFile = File(pickedImage!.path);
 
-    await _storage.ref('${user!.uid}/$fileName').putFile(imageFile);
+    await _storage
+        .ref('${user!.uid}/image-${this.enabledMarker}')
+        .putFile(imageFile)
+        .then((value) => upload());
+  }
+
+  Future<String> getImage() async {
+    final user = _auth.currentUser;
+
+    String url = await _storage
+        .ref('${user!.uid}/image-${this.enabledMarker}')
+        .getDownloadURL();
+
+    return url;
   }
 }
