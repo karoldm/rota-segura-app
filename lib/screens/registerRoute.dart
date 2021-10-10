@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 //libraries
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:rota_segura_app/screens/help.dart';
 import 'package:rota_segura_app/screens/home.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -36,10 +37,17 @@ class _RegisterRoutePageState extends State<RegisterRoutePage> {
           actions: <Widget>[
             Container(
               padding: const EdgeInsets.all(5),
-              child: Icon(
-                Icons.help,
+              child: IconButton(
+                icon: Icon(
+                  Icons.help,
+                  size: 40.0,
+                ),
                 color: Color(0xff005783),
-                size: 40,
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        //mandando usuário para a página de perfil
+                        builder: (context) => HelpPage())),
               ),
             ),
           ],

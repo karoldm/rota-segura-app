@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 //models
 import 'package:rota_segura_app/models/user.dart';
 import 'package:rota_segura_app/models/userRouteMap.dart';
+import 'package:rota_segura_app/screens/help.dart';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
@@ -45,14 +46,14 @@ class _HomePageState extends State<HomePage> {
                         child: ListView(children: <Widget>[
                       DrawerHeader(
                         child: Text(
-                          'Bem Vindo(a) ' + dataUser['name'],
+                          'Bem Vindo ' + dataUser['name'],
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white, fontSize: 20.0),
                         ),
                         decoration: BoxDecoration(
                             color: Color(0xff00AAFF),
                             image: DecorationImage(
-                                image: AssetImage("images/mapMarker.png"),
+                                image: AssetImage("images/mapBackground.png"),
                                 fit: BoxFit.cover,
                                 alignment: Alignment.topCenter)),
                       ),
@@ -108,10 +109,17 @@ class _HomePageState extends State<HomePage> {
                       actions: <Widget>[
                         Container(
                           padding: const EdgeInsets.all(5),
-                          child: Icon(
-                            Icons.help,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.help,
+                              size: 40.0,
+                            ),
                             color: Color(0xff005783),
-                            size: 40,
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    //mandando usuário para a página de perfil
+                                    builder: (context) => HelpPage())),
                           ),
                         ),
                       ],

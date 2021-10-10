@@ -1,6 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
+import 'package:rota_segura_app/screens/help.dart';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
@@ -103,10 +104,17 @@ class EditPageState extends State<EditPage> {
                     actions: <Widget>[
                       Container(
                         padding: const EdgeInsets.all(5),
-                        child: Icon(
-                          Icons.help,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.help,
+                            size: 40.0,
+                          ),
                           color: Color(0xff005783),
-                          size: 40,
+                          onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  //mandando usuário para a página de perfil
+                                  builder: (context) => HelpPage())),
                         ),
                       ),
                     ],
