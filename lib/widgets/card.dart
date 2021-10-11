@@ -109,7 +109,22 @@ class _CardWidgetState extends State<CardWidget> {
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Button(
                               title: "finalizar chamada",
-                              function: () {},
+                              function: () {
+                                adminModel.closeCall(id, () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          backgroundColor: Colors.green,
+                                          content: Text(
+                                              'Chamada finalizada com sucesso!')));
+                                  widget._updatePage();
+                                }, () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content: Text(
+                                              'Algo deu errado ao encerrar essa chamada! Tente novamente...')));
+                                });
+                              },
                               colors: [0xffDB0000, 0xffFF7272]))
                     ],
                   ))));

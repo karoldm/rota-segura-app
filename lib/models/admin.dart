@@ -21,4 +21,14 @@ class AdminModel extends Model {
     calls = documents.docs.map((doc) => doc.data());
     return calls;
   }
+
+  void closeCall(
+      String id, VoidCallback? success(), VoidCallback? fail()) async {
+    await _db.collection('chamadas').doc(id).delete().then((value) {
+      success();
+    }).catchError((e) {
+      print(e);
+      fail();
+    });
+  }
 }
