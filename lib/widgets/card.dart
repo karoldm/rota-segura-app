@@ -1,22 +1,25 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 //models
 import 'package:rota_segura_app/models/admin.dart';
-import 'package:rota_segura_app/models/userRouteMap.dart';
 import 'package:rota_segura_app/screens/admin/userInfoMarker.dart';
+
+//screens
 import 'package:rota_segura_app/screens/admin/userRoute.dart';
 
 //librearies
 import 'package:scoped_model/scoped_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 //widgets
 import 'package:rota_segura_app/widgets/button.dart';
 
 class CardWidget extends StatefulWidget {
   final _data;
-  VoidCallback _updatePage;
+  final VoidCallback _updatePage;
 
   @override
   State<StatefulWidget> createState() => _CardWidgetState();
@@ -27,13 +30,47 @@ class CardWidget extends StatefulWidget {
 class _CardWidgetState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
-    final name = widget._data['name'];
-    final adress = widget._data['adress'];
-    final tel = widget._data['tel'];
-    final cpf = widget._data['cpf'];
-    final birth = widget._data['birth'];
+    final _name = widget._data['name'];
+    final _adress = widget._data['adress'];
+    final _tel = widget._data['tel'];
+    final _cpf = widget._data['cpf'];
+    final _birth = widget._data['birth'];
 
-    final id = widget._data['id'];
+    final _id = widget._data['id'];
+
+    Set<Polyline> _route = {};
+    Set<Marker> _markers = {};
+    List<LatLng> _polylinePoints = [];
+    int _markersIdCount = 1;
+    String? _enabledMarker;
+
+    void _addMarker(LatLng position) {
+      final String markerId = 'marker_id_$_markersIdCount';
+      _markersIdCount++;
+      _markers.add(Marker(
+          markerId: MarkerId(markerId),
+          position: position,
+          onTap: () {
+            _enabledMarker = [position.latitude, position.longitude].toString();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    //mandando usuário para a página de perfil
+                    builder: (context) => UserInfoMarker(_enabledMarker)));
+          }));
+      _polylinePoints.add(position);
+    }
+
+    List listCoordinates = json.decode(widget._data['route']);
+    listCoordinates.forEach((coordinate) {
+      _addMarker(LatLng(coordinate[0], coordinate[1]));
+    });
+
+    _route.add(Polyline(
+        polylineId: PolylineId('polyline_id_1'),
+        color: Colors.black,
+        width: 2,
+        points: _polylinePoints));
 
     return ScopedModelDescendant<AdminModel>(
         builder: (context, child, adminModel) {
@@ -60,42 +97,42 @@ class _CardWidgetState extends State<CardWidget> {
                         ),
                       ),
                       Text(
-                        'Nome: $name',
+                        'Nome: $_name',
                         style: TextStyle(
                             color: Colors.white, fontSize: 16.0, height: 1.8),
                       ),
                       Text(
-                        'CPF: $cpf',
+                        'CPF: $_cpf',
                         style: TextStyle(
                             color: Colors.white, fontSize: 16.0, height: 1.8),
                       ),
                       Text(
-                        'Data de Nascimento: $birth',
+                        'Data de Nascimento: $_birth',
                         style: TextStyle(
                             color: Colors.white, fontSize: 16.0, height: 1.8),
                       ),
                       Text(
-                        'Endereço: ${adress['endereco']}',
+                        'Endereço: ${_adress['endereco']}',
                         style: TextStyle(
                             color: Colors.white, fontSize: 16.0, height: 1.8),
                       ),
                       Text(
-                        'Bairro: ${adress['bairro']}',
+                        'Bairro: ${_adress['bairro']}',
                         style: TextStyle(
                             color: Colors.white, fontSize: 16.0, height: 1.8),
                       ),
                       Text(
-                        'Cidade: ${adress['cidade']}',
+                        'Cidade: ${_adress['cidade']}',
                         style: TextStyle(
                             color: Colors.white, fontSize: 16.0, height: 1.8),
                       ),
                       Text(
-                        'Estado: ${adress['estado']}',
+                        'Estado: ${_adress['estado']}',
                         style: TextStyle(
                             color: Colors.white, fontSize: 16.0, height: 1.8),
                       ),
                       Text(
-                        'Telefone: $tel',
+                        'Telefone: $_tel',
                         style: TextStyle(
                             color: Colors.white, fontSize: 16.0, height: 1.8),
                       ),
@@ -103,14 +140,21 @@ class _CardWidgetState extends State<CardWidget> {
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Button(
                               title: "visualizar rota",
-                              function: () {},
+                              function: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        //mandando usuário para a página de perfil
+                                        builder: (context) =>
+                                            UserRoutePage(_route, _markers)));
+                              },
                               colors: [0xffDB0000, 0xffFF7272])),
                       Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Button(
                               title: "finalizar chamada",
                               function: () {
-                                adminModel.closeCall(id, () {
+                                adminModel.closeCall(_id, () {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           backgroundColor: Colors.green,

@@ -1,7 +1,6 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
@@ -13,6 +12,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AdminModel extends Model {
   FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  late BitmapDescriptor customIcon;
+  late GoogleMapController _mapController;
+  Location _location = Location();
 
   Future<Iterable> getCalls() async {
     Iterable calls = [];
@@ -29,6 +32,18 @@ class AdminModel extends Model {
     }).catchError((e) {
       print(e);
       fail();
+    });
+  }
+
+  void onMapCreated(GoogleMapController controller) {
+    this._mapController = controller;
+    this._location.onLocationChanged.listen((l) {
+      this._mapController.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                  target: LatLng(l.latitude!, l.longitude!), zoom: 15),
+            ),
+          );
     });
   }
 }
