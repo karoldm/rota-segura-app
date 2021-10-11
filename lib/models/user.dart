@@ -27,12 +27,15 @@ class UserModel extends Model {
       print(e);
     });
 
+    Map<String, dynamic> data = this._userData!;
+    data['id'] = this._user!.uid;
+
     await _db.collection('chamadas').doc(_user!.uid).get().then((value) async {
       if (!value.exists) {
         await _db
             .collection('chamadas')
             .doc(_user!.uid)
-            .set(this._userData!)
+            .set(data)
             .then((value) {
           success();
         }).catchError((e) {
@@ -45,10 +48,7 @@ class UserModel extends Model {
     });
   }
 
-  bool isAdmin() {
-    //return (this._user!.uid == "1dxrEJGIN4RBtyANdKlhHU38n8J3");
-    return true;
-  }
+  bool isAdmin() => this._user!.uid == "1dxrEJGIN4RBtyANdKlhHU38n8J3";
 
   void signUp(Map<String, dynamic> data, String password,
       VoidCallback? success(), VoidCallback? fail()) async {

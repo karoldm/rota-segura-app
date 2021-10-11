@@ -1,16 +1,18 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
-import 'package:rota_segura_app/models/userRouteMap.dart';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
 
 //screens
+import 'package:rota_segura_app/screens/admin/home.dart';
 import 'package:rota_segura_app/screens/login.dart';
 import 'package:rota_segura_app/screens/home.dart';
 
 //models
+import 'package:rota_segura_app/models/userRouteMap.dart';
+import 'package:rota_segura_app/models/admin.dart';
 import 'package:rota_segura_app/models/user.dart';
 
 //firebase
@@ -30,12 +32,16 @@ class MyApp extends StatelessWidget {
         model: UserModel(),
         child: ScopedModel<UserRouteMap>(
             model: UserRouteMap(),
-            child: ScopedModelDescendant<UserModel>(
-                builder: (context, child, model) {
-              return MaterialApp(
-                  title: 'rota segura',
-                  debugShowCheckedModeBanner: false,
-                  home: model.isLoggedIn() ? HomePage() : LoginPage());
-            })));
+            child: ScopedModel<AdminModel>(
+                model: AdminModel(),
+                child: ScopedModelDescendant<UserModel>(
+                    builder: (context, child, model) {
+                  return MaterialApp(
+                      title: 'rota segura',
+                      debugShowCheckedModeBanner: false,
+                      home: model.isLoggedIn()
+                          ? (model.isAdmin() ? AdminHome() : HomePage())
+                          : LoginPage());
+                }))));
   }
 }

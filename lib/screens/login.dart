@@ -1,6 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
+import 'package:rota_segura_app/screens/admin/home.dart';
 
 //widgets
 import 'package:rota_segura_app/widgets/appName.dart';
@@ -107,7 +108,9 @@ class _LoginPageState extends State<LoginPage> {
                                     context,
                                     MaterialPageRoute(
                                         //mandando usuário para a página de perfil
-                                        builder: (context) => HomePage()));
+                                        builder: (context) => (model.isAdmin()
+                                            ? AdminHome()
+                                            : HomePage())));
                               }, () {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
