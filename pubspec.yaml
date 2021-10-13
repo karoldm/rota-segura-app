@@ -69,6 +69,9 @@ flutter:
     - images/route-7.png
     - images/marker-1.png
     - images/marker-2.png
+    - images/admin-1.png
+    - images/admin-2.png
+    - images/admin-3.png
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
