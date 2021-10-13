@@ -1,6 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
+import 'package:rota_segura_app/screens/admin/help.dart';
 import 'package:rota_segura_app/widgets/divider.dart';
 
 //libraries
@@ -22,61 +23,75 @@ class UserInfoMarker extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(
             elevation: 0.0,
-            backgroundColor: Colors.transparent,
+            backgroundColor: Color(0xff3dbeff),
             title: Text(
-              "Informações do local",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 25.0,
-              ),
+              "Rota Segura",
+              style: TextStyle(fontSize: 25),
             ),
             centerTitle: true,
-          ),
-          backgroundColor: Color(0xff005783),
-          body: Container(
-              child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ListView(children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Text(
-                        "Aqui é possível visualizar informações como descrição e imagens do local adicionadas por quem está solicitando ajuda!",
-                        style: TextStyle(color: Colors.white, fontSize: 17.0),
-                        textAlign: TextAlign.justify,
-                      ),
+            actions: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(5),
+                child: IconButton(
+                    icon: Icon(
+                      Icons.help,
+                      size: 40.0,
                     ),
-                    FutureBuilder(
-                        future: adminModel.getUserInfo(_userId, _textMarkers),
-                        builder: (context,
-                            AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                          if (snapshot.hasData) {
-                            return SingleChildScrollView(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 15.0),
-                                    child: Text(
-                                      snapshot.data!['text'],
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 14.0),
-                                    ),
-                                  ),
-                                  snapshot.data!['url'] != null
+                    color: Color(0xff005783),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              //mandando usuário para a página de perfil
+                              builder: (context) => AdminHelpPage()));
+                    }),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.white,
+          body: Container(
+              padding: const EdgeInsets.all(30.0),
+              child: ListView(children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 10.0),
+                  child: Text(
+                    "Aqui é possível visualizar informações como descrição e imagens do local adicionadas por quem está solicitando ajuda!",
+                    style: TextStyle(fontSize: 17.0),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                FutureBuilder(
+                    future: adminModel.getUserInfo(_userId, _textMarkers),
+                    builder: (context,
+                        AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                      if (snapshot.hasData) {
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              DividerForm(text: 'Descrição do local'),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 50.0),
+                                child: Text(
+                                  snapshot.data!['text'],
+                                  style: TextStyle(fontSize: 16.0),
+                                ),
+                              ),
+                              DividerForm(text: 'Imagem do local'),
+                              Padding(
+                                  padding: const EdgeInsets.only(top: 50.0),
+                                  child: snapshot.data!['url'] != null
                                       ? Image(
                                           image: NetworkImage(
                                               snapshot.data!['url']))
-                                      : Container()
-                                ],
-                              ),
-                            );
-                          }
-                          return Container();
-                        })
+                                      : Container()),
+                            ],
+                          ),
+                        );
+                      }
+                      return Container();
+                    })
 
-                    /*FutureBuilder(
+                /*FutureBuilder(
                       future: model,
                       builder: (context, AsyncSnapshot<String> snapshot) {
                         if (snapshot.hasData) {
@@ -90,7 +105,7 @@ class UserInfoMarker extends StatelessWidget {
                           return Container();
                         }
                       }),*/
-                  ]))));
+              ])));
     });
   }
 }

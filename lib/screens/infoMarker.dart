@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:rota_segura_app/models/userRouteMap.dart';
+import 'package:rota_segura_app/screens/help.dart';
+import 'package:rota_segura_app/widgets/divider.dart';
 
 //model
 import 'package:scoped_model/scoped_model.dart';
@@ -31,33 +33,48 @@ class _InfoMarkerState extends State<InfoMarker> {
               return Scaffold(
                   appBar: AppBar(
                     elevation: 0.0,
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: Color(0xff3dbeff),
                     title: Text(
-                      "Informações do local",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25.0,
-                      ),
+                      "Rota Segura",
+                      style: TextStyle(fontSize: 25),
                     ),
                     centerTitle: true,
+                    actions: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        child: IconButton(
+                            icon: Icon(
+                              Icons.help,
+                              size: 40.0,
+                            ),
+                            color: Color(0xff005783),
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      //mandando usuário para a página de perfil
+                                      builder: (context) => HelpPage()));
+                            }),
+                      ),
+                    ],
                   ),
-                  backgroundColor: Color(0xff005783),
+                  backgroundColor: Colors.white,
                   body: Container(
                       child: Padding(
-                    padding: const EdgeInsets.all(30),
+                    padding: const EdgeInsets.all(30.0),
                     child: ListView(
                       children: <Widget>[
                         Container(
                           padding: const EdgeInsets.only(bottom: 20.0),
                           child: Text(
                             "Utilize esse espaço para adicionar uma imagem e uma descrição do local definido pelo marcador (você pode indicar pontos de referências ou alguma característica que ajude a indentificar o local). Essas informações podem agilizar a chagada de ajuda até você! \n*Ao carregar uma imagem ela será automaticamente salva, mesmo que você cancele a operação!",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 17.0),
+                            style: TextStyle(fontSize: 17.0),
                             textAlign: TextAlign.justify,
                           ),
                         ),
+                        DividerForm(text: 'Descrição do local'),
                         Container(
+                          padding: const EdgeInsets.only(top: 50.0),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.all(
@@ -72,21 +89,24 @@ class _InfoMarkerState extends State<InfoMarker> {
                                 hintText: "Insira aqui uma descrição do local"),
                           ),
                         ),
+                        DividerForm(text: 'Imagem do local'),
                         Container(
+                            padding: const EdgeInsets.only(top: 50.0),
                             child: FutureBuilder(
-                          future: mapModel.getImage(),
-                          builder: (context, AsyncSnapshot<String> snapshot) {
-                            if (snapshot.hasData) {
-                              return Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      0, 30.0, 0, 10.0),
-                                  child: Image(
-                                      image: NetworkImage(snapshot.data!)));
-                            } else {
-                              return Container();
-                            }
-                          },
-                        )),
+                              future: mapModel.getImage(),
+                              builder:
+                                  (context, AsyncSnapshot<String> snapshot) {
+                                if (snapshot.hasData) {
+                                  return Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 30.0, 0, 10.0),
+                                      child: Image(
+                                          image: NetworkImage(snapshot.data!)));
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            )),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 25.0, 0, 10.0),
                           child: Button(
