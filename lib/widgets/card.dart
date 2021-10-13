@@ -38,39 +38,7 @@ class _CardWidgetState extends State<CardWidget> {
 
     final _id = widget._data['id'];
 
-    Set<Polyline> _route = {};
-    Set<Marker> _markers = {};
-    List<LatLng> _polylinePoints = [];
-    int _markersIdCount = 1;
-    String? _enabledMarker;
-
-    void _addMarker(LatLng position) {
-      final String markerId = 'marker_id_$_markersIdCount';
-      _markersIdCount++;
-      _markers.add(Marker(
-          markerId: MarkerId(markerId),
-          position: position,
-          onTap: () {
-            _enabledMarker = [position.latitude, position.longitude].toString();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    //mandando usuário para a página de perfil
-                    builder: (context) => UserInfoMarker(_enabledMarker)));
-          }));
-      _polylinePoints.add(position);
-    }
-
-    List listCoordinates = json.decode(widget._data['route']);
-    listCoordinates.forEach((coordinate) {
-      _addMarker(LatLng(coordinate[0], coordinate[1]));
-    });
-
-    _route.add(Polyline(
-        polylineId: PolylineId('polyline_id_1'),
-        color: Colors.black,
-        width: 2,
-        points: _polylinePoints));
+    final _textMarkers = widget._data['textMarkers'] as Map<String, dynamic>;
 
     return ScopedModelDescendant<AdminModel>(
         builder: (context, child, adminModel) {
@@ -141,12 +109,18 @@ class _CardWidgetState extends State<CardWidget> {
                           child: Button(
                               title: "visualizar rota",
                               function: () {
+                                adminModel.getUserRoute(widget._data['route'],
+                                    () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => UserInfoMarker(
+                                              _textMarkers, _id)));
+                                });
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        //mandando usuário para a página de perfil
-                                        builder: (context) =>
-                                            UserRoutePage(_route, _markers)));
+                                        builder: (context) => UserRoutePage()));
                               },
                               colors: [0xffDB0000, 0xffFF7272])),
                       Padding(

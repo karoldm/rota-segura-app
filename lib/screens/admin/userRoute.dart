@@ -15,11 +15,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class UserRoutePage extends StatefulWidget {
-  Set<Polyline> _route;
-  Set<Marker> _markers;
-
-  UserRoutePage(this._route, this._markers);
-
   @override
   State<StatefulWidget> createState() => _UserRoutePageState();
 }
@@ -66,8 +61,8 @@ class _UserRoutePageState extends State<UserRoutePage> {
         return Container(
             child: GoogleMap(
           onMapCreated: model.onMapCreated,
-          polylines: widget._route,
-          markers: widget._markers,
+          polylines: model.route,
+          markers: model.markers,
           initialCameraPosition: CameraPosition(
             target: _initialCamera,
           ),
