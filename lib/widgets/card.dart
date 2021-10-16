@@ -1,7 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
-import 'dart:convert';
+import 'package:intl/intl.dart';
 
 //models
 import 'package:rota_segura_app/models/admin.dart';
@@ -12,7 +12,6 @@ import 'package:rota_segura_app/screens/admin/userRoute.dart';
 
 //librearies
 import 'package:scoped_model/scoped_model.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 //widgets
 import 'package:rota_segura_app/widgets/button.dart';
@@ -40,6 +39,8 @@ class _CardWidgetState extends State<CardWidget> {
 
     final _textMarkers = widget._data['textMarkers'] as Map<String, dynamic>;
 
+    final _date = widget._data['date'];
+
     return ScopedModelDescendant<AdminModel>(
         builder: (context, child, adminModel) {
       return Padding(
@@ -56,7 +57,9 @@ class _CardWidgetState extends State<CardWidget> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "10-10-2021    22:23h",
+                          DateFormat(" dd/MM/yyyy  HH:mm").format(
+                              DateTime.fromMicrosecondsSinceEpoch(
+                                  _date.microsecondsSinceEpoch)),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,

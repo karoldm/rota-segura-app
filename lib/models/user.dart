@@ -29,6 +29,7 @@ class UserModel extends Model {
 
     Map<String, dynamic> data = this._userData!;
     data['id'] = this._user!.uid;
+    data['date'] = DateTime.now();
 
     await _db.collection('chamadas').doc(_user!.uid).get().then((value) async {
       if (!value.exists) {

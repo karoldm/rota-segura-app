@@ -8,7 +8,6 @@ import 'package:rota_segura_app/models/admin.dart';
 //screens
 import 'package:rota_segura_app/screens/admin/help.dart';
 import 'package:rota_segura_app/screens/admin/home.dart';
-import 'package:rota_segura_app/screens/admin/userInfoMarker.dart';
 
 //libraries
 import 'package:scoped_model/scoped_model.dart';
