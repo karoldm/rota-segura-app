@@ -20,6 +20,32 @@ class UserModel extends Model {
   //para recuperar dados do db usa-se _user.uid
   Map<String, dynamic>? _userData; //dados do usuario
 
+  void delet(
+      String password, VoidCallback? success(), VoidCallback? fail()) async {
+    final userUid = this._user!.uid;
+
+    await this
+        ._auth
+        .signInWithEmailAndPassword(
+            email: this._user!.email!, password: password)
+        .then((value) async {
+      await this._user!.delete().then((value) async {
+        await this._db.collection('users').doc(userUid).delete().then((value) {
+          success();
+        }).catchError((e) {
+          print(e);
+          fail();
+        });
+      }).catchError((e) {
+        print(e);
+        fail();
+      });
+    }).catchError((e) {
+      print(e);
+      fail();
+    });
+  }
+
   void shareRoute(VoidCallback? success(), VoidCallback? fail()) async {
     await this._db.collection('users').doc(this._user!.uid).get().then((value) {
       this._userData = value.data();

@@ -152,7 +152,7 @@ class EditPageState extends State<EditPage> {
                                       colors: [
                                         _buttonPasswordColor,
                                         _buttonPasswordColor
-                                      ])
+                                      ]),
                                 ],
                               )),
                               _editScreen == true ? editForm() : passwordForm()

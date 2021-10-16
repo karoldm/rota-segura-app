@@ -19,6 +19,7 @@ import 'package:rota_segura_app/screens/infoMarker.dart';
 
 //widgets
 import 'package:rota_segura_app/widgets/button.dart';
+import 'package:rota_segura_app/widgets/inputPassword.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -65,6 +66,76 @@ class _HomePageState extends State<HomePage> {
                             MaterialPageRoute(
                                 //mandando usuário para a página de perfil
                                 builder: (context) => EditPage())),
+                      ),
+                      ListTile(
+                        leading: Icon(Icons.delete, color: Colors.black),
+                        title: Text('deletar minha conta'),
+                        onTap: () {
+                          TextEditingController _password =
+                              TextEditingController();
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    actionsPadding: const EdgeInsets.all(15.0),
+                                    titlePadding: const EdgeInsets.all(15.0),
+                                    contentPadding: const EdgeInsets.all(15.0),
+                                    title: Text('Deletar Conta',
+                                        textAlign: TextAlign.center),
+                                    content:
+                                        Text('Digite sua senha para continuar'),
+                                    actions: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20.0),
+                                        child: InputPassword(
+                                          placeholder: 'senha',
+                                          controller: _password,
+                                        ),
+                                      ),
+                                      Button(
+                                          title: 'Confirmar',
+                                          function: () {
+                                            userModel.delet(_password.text, () {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LoginPage()));
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      content: Text(
+                                                          'Conta deletada com sucesso!')));
+                                            }, () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                        title: Text('Erro'),
+                                                        content: Text(
+                                                            'Algo deu errado ao deletar sua conta! Tente novamente...'),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Text('Ok'))
+                                                        ],
+                                                      ));
+                                            });
+                                          },
+                                          colors: [0xffDB0000, 0xffDB0000]),
+                                      Button(
+                                          title: 'cancelar',
+                                          function: () {
+                                            Navigator.pop(context);
+                                          },
+                                          colors: [0xffC5C5C5, 0xffC5C5C5])
+                                    ],
+                                  ));
+                        },
                       ),
                       ListTile(
                           leading: Icon(
