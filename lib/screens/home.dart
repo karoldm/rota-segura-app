@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, child, userModel) {
       return ScopedModelDescendant<UserRouteMap>(
           builder: (context, child, mapModel) {
+        mapModel.clearMap();
         return FutureBuilder(
             future: userModel.getUserData(),
             builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {

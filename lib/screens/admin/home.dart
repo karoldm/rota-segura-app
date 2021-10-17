@@ -66,7 +66,7 @@ class _AdminHomeState extends State<AdminHome> {
                       ),
                       color: Color(0xff005783),
                       onPressed: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 //mandando usuário para a página de perfil
@@ -82,7 +82,10 @@ class _AdminHomeState extends State<AdminHome> {
                     List<Widget> cards = [];
                     snapshot.data!.forEach((element) {
                       cards.add(CardWidget(element as Map, () {
-                        setState(() {});
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminHome()));
                       }));
                     });
                     return ListView(

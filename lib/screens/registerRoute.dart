@@ -127,6 +127,7 @@ class _RegisterRoutePageState extends State<RegisterRoutePage> {
                       Button(
                           title: "cancelar",
                           function: () {
+                            model.clearMap();
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
