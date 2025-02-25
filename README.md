@@ -9,15 +9,15 @@ O **Rota Segura** tem como objetivo ajudar entidades de segurança, como políci
 Com o aplicativo, os usuários podem registrar rotas no mapa conectando pontos estratégicos, adicionando imagens e descrições para facilitar a identificação dos locais. Em caso de emergência, a rota do usuário é enviada automaticamente para um administrador, que pode visualizar e gerenciar todos os chamados dentro do app.
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-  <img src="/images/route-1.png" alt="route" width="25%">
-  <img src="/images/route-2.png" alt="route" width="25%">
-  <img src="/images/route-3.png" alt="route" width="25%">
-  <img src="/images/route-4.png" alt="route" width="25%">
-  <img src="/images/route-5.png" alt="route" width="25%">
-  <img src="/images/route-7.png" alt="route" width="25%">
-  <img src="/images/marker-1.png" alt="marker" width="25%">
-  <img src="/images/marker-2.png" alt="marker" width="25%">
-  <img src="/images/admin-1.png" alt="admin" width="25%">
+  <img src="/images/route-1.png" alt="route" width="20%">
+  <img src="/images/route-2.png" alt="route" width="20%">
+  <img src="/images/route-3.png" alt="route" width="20%">
+  <img src="/images/route-4.png" alt="route" width="20%">
+  <img src="/images/route-5.png" alt="route" width="20%">
+  <img src="/images/route-7.png" alt="route" width="20%">
+  <img src="/images/marker-1.png" alt="marker" width="20%">
+  <img src="/images/marker-2.png" alt="marker" width="20%">
+  <img src="/images/admin-1.png" alt="admin" width="20%">
 </div>
 
 ## 🚀 Funcionalidades
